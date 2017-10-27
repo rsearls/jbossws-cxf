@@ -1,0 +1,18 @@
+digraph "classes" {
+    // Path: /home/rsearls/j1/jbws/jbossws-cxf/modules/addons/transports/udp/target/classes
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "java.io";
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "java.lang";
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "java.net";
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "java.util";
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "java.util.logging";
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "org.apache.cxf (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "org.apache.cxf.common.injection (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "org.apache.cxf.common.logging (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "org.apache.cxf.common.util (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "org.apache.cxf.helpers (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "org.apache.cxf.message (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "org.apache.cxf.service.model (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "org.apache.cxf.transport (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "org.apache.cxf.workqueue (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.udp"    -> "org.apache.cxf.ws.addressing (cxf-core-3.2.0.jar)";
+}

@@ -1,0 +1,40 @@
+digraph "classes" {
+    // Path: /home/rsearls/j1/jbws/jbossws-cxf/modules/test-utils/target/classes
+   "org.jboss.wsf.test"                               -> "java.awt";
+   "org.jboss.wsf.test"                               -> "java.io";
+   "org.jboss.wsf.test"                               -> "java.lang";
+   "org.jboss.wsf.test"                               -> "java.lang.annotation";
+   "org.jboss.wsf.test"                               -> "java.net";
+   "org.jboss.wsf.test"                               -> "java.nio.charset";
+   "org.jboss.wsf.test"                               -> "java.security";
+   "org.jboss.wsf.test"                               -> "java.util";
+   "org.jboss.wsf.test"                               -> "java.util.concurrent";
+   "org.jboss.wsf.test"                               -> "java.util.concurrent.atomic";
+   "org.jboss.wsf.test"                               -> "javax.activation";
+   "org.jboss.wsf.test"                               -> "javax.crypto";
+   "org.jboss.wsf.test"                               -> "javax.management";
+   "org.jboss.wsf.test"                               -> "javax.management.remote";
+   "org.jboss.wsf.test"                               -> "javax.naming";
+   "org.jboss.wsf.test"                               -> "javax.security.auth.callback";
+   "org.jboss.wsf.test"                               -> "javax.security.sasl";
+   "org.jboss.wsf.test"                               -> "javax.xml.namespace (xml-apis-1.3.04.jar)";
+   "org.jboss.wsf.test"                               -> "javax.xml.transform (xml-apis-1.3.04.jar)";
+   "org.jboss.wsf.test"                               -> "javax.xml.transform.stream (xml-apis-1.3.04.jar)";
+   "org.jboss.wsf.test"                               -> "javax.xml.ws (jboss-jaxws-api_2.2_spec-2.0.4.Final.jar)";
+   "org.jboss.wsf.test"                               -> "javax.xml.ws.handler (jboss-jaxws-api_2.2_spec-2.0.4.Final.jar)";
+   "org.jboss.wsf.test"                               -> "javax.xml.ws.soap (jboss-jaxws-api_2.2_spec-2.0.4.Final.jar)";
+   "org.jboss.wsf.test"                               -> "org.jboss.logging (jboss-logging-3.2.1.Final.jar)";
+   "org.jboss.wsf.test"                               -> "org.jboss.shrinkwrap.api (shrinkwrap-api-1.1.3.jar)";
+   "org.jboss.wsf.test"                               -> "org.jboss.shrinkwrap.api.exporter (shrinkwrap-api-1.1.3.jar)";
+   "org.jboss.wsf.test"                               -> "org.jboss.shrinkwrap.api.spec (shrinkwrap-api-1.1.3.jar)";
+   "org.jboss.wsf.test"                               -> "org.jboss.ws.common (jbossws-common-3.2.0-SNAPSHOT.jar)";
+   "org.jboss.wsf.test"                               -> "org.jboss.ws.common.concurrent (jbossws-common-3.2.0-SNAPSHOT.jar)";
+   "org.jboss.wsf.test"                               -> "org.jboss.ws.common.io (jbossws-common-3.2.0-SNAPSHOT.jar)";
+   "org.jboss.wsf.test"                               -> "org.jboss.wsf.stack.cxf.client.configuration (jbossws-cxf-client-5.2.0-SNAPSHOT.jar)";
+   "org.jboss.wsf.test"                               -> "org.junit (junit-4.12.jar)";
+   "org.jboss.wsf.test"                               -> "org.junit.rules (junit-4.12.jar)";
+   "org.jboss.wsf.test"                               -> "org.junit.runner (junit-4.12.jar)";
+   "org.jboss.wsf.test"                               -> "org.junit.runners.model (junit-4.12.jar)";
+   "org.jboss.wsf.test"                               -> "org.w3c.dom (xml-apis-1.3.04.jar)";
+   "org.jboss.wsf.test"                               -> "sun.net.util (JDK internal API (rt.jar))";
+}

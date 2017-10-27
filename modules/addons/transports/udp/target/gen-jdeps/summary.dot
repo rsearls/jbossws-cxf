@@ -1,0 +1,4 @@
+digraph "summary" {
+  "classes"                                          -> "cxf-core-3.2.0.jar";
+  "classes"                                          -> "rt.jar";
+}

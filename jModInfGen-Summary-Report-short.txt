@@ -1,0 +1,15 @@
+  Fri Oct 27 18:31:19 EDT 2017
+  jModInfoGet Summary Report
+
+13 root directories processed
+0 module-info.java files found
+6 classes.dot files found
+7 directories without classes.dot files
+14 service provider files found
+6 generated-module-info.java files written
+
+  *** Duplicate Package Names ***
+  1 duplicate package names found in the following modules.
+  package: org.jboss.wsf.stack.cxf in modules
+	client
+	server

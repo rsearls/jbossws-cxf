@@ -1,0 +1,22 @@
+digraph "classes" {
+    // Path: /home/rsearls/j1/jbws/jbossws-cxf/modules/addons/transports/http/undertow/target/classes
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "io.undertow.server (undertow-core-1.0.10.Final.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "io.undertow.server.handlers (undertow-core-1.0.10.Final.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "java.io";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "java.lang";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "java.net";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "java.security";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "java.util";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "java.util.logging";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "javax.annotation";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "javax.xml.ws.spi.http (jboss-jaxws-api_2.2_spec-2.0.4.Final.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "org.apache.cxf (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "org.apache.cxf.buslifecycle (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "org.apache.cxf.common.injection (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "org.apache.cxf.common.logging (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "org.apache.cxf.interceptor (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "org.apache.cxf.service.model (cxf-core-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "org.apache.cxf.transport.http (cxf-rt-transports-http-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "org.apache.cxf.transport.http_jaxws_spi (cxf-rt-frontend-jaxws-3.2.0.jar)";
+   "org.jboss.wsf.stack.cxf.addons.transports.undertow" -> "org.jboss.ws.undertow_httpspi (jaxws-undertow-httpspi-1.0.1.Final.jar)";
+}

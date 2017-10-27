@@ -1,0 +1,11 @@
+digraph "summary" {
+  "classes"                                          -> "jboss-jaxws-api_2.2_spec-2.0.4.Final.jar";
+  "classes"                                          -> "jboss-logging-3.2.1.Final.jar";
+  "classes"                                          -> "jbossws-common-3.2.0-SNAPSHOT.jar";
+  "classes"                                          -> "jbossws-cxf-client-5.2.0-SNAPSHOT.jar";
+  "classes"                                          -> "jce.jar";
+  "classes"                                          -> "junit-4.12.jar";
+  "classes"                                          -> "rt.jar";
+  "classes"                                          -> "shrinkwrap-api-1.1.3.jar";
+  "classes"                                          -> "xml-apis-1.3.04.jar";
+}
