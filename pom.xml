@@ -1519,9 +1519,80 @@
           --add-exports=java.xml/com.sun.org.apache.xpath.internal.jaxp=ALL-UNNAMED
           --add-exports=java.xml/com.sun.xml.internal.stream=ALL-UNNAMED
           --add-exports=java.xml/javax.xml.namespace=ALL-UNNAMED
+          --module-path /home/rsearls/.m2/repository/org/apache/cxf/xjcplugins/cxf-xjc-ts/3.1.0/cxf-xjc-ts-3.1.0.jar
         </modular.jdk.props>
         <!--modular.jdk.props>-Dsun.util.logging.disableCallerCheck=true -Dsun.reflect.debugModuleAccessChecks=true -Djaxb.debug=true</modular.jdk.props-->
       </properties>
+
+      <build>
+        <plugins>
+          <!-- rls test start -->
+          <!-- There were issues with provider org.jboss.resteasy.spi.ResteasyProviderFactory
+               being in one module and the provider ref in a different module.
+               There is an issue with jar's that do not follow the required naming
+               (jdk9) convention.  redhat team is deciding how to address this issue.
+          -->
+          <plugin>
+            <groupId>org.moditect</groupId>
+            <artifactId>moditect-maven-plugin</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <executions>
+              <execution>
+                <id>generate-module-info</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>generate-module-info</goal>
+                </goals>
+                <configuration>
+                  <modules>
+                    <module>
+                      <artifact>
+                        <groupId>org.jboss.ws.cxf</groupId>
+                        <artifactId>jbossws-cxf-client</artifactId>
+                        <version>5.2.1-SNAPSHOT</version>
+                      </artifact>
+                      <!-- rls this did not work to resolve ref
+                      <additionalDependencies>
+                          <dependency>
+                              <groupId>org.apache.cxf.xjcplugins</groupId>
+                              <artifactId>cxf-xjc-ts</artifactId>
+                              <version>3.1.0</version>
+                          </dependency>
+                      </additionalDependencies>
+-->
+                      <moduleInfo>
+                        <name>jbossws.cxf.client</name>
+                        <exports>
+                          *;
+                        </exports>
+                        <requires>
+                          cxf.xjc.ts@3.1.0 automatic
+                        </requires>
+                        <!--
+                        <requires>
+                            static com.some.optional.dependency;
+                            *;
+                        </requires>
+                        <uses>
+                            com.example.SomeService;
+                        </uses>
+                        -->
+                        <addServiceUses>true</addServiceUses>
+                      </moduleInfo>
+                    </module>
+                    <!--
+                    <module>
+                        ...
+                    </module>
+                    -->
+                  </modules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <!-- rls test end -->
+        </plugins>
+      </build>
     </profile>
 
     <!-- [JBWS-3666] -->
