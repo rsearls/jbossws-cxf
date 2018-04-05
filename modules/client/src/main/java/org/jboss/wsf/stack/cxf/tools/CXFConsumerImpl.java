@@ -39,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
@@ -308,6 +310,9 @@ public class CXFConsumerImpl extends WSContractConsumer
       WSDLToJava w2j = new WSDLToJava(args.toArray(new String[0]));
       try
       {
+         // TODO temp solution when using JDK-9 and JDK-10
+         System.setProperty("org.apache.cxf.common.util.Compiler-fork", "true");
+
          ToolContext ctx = new ToolContext();
          ctx.put(ToolConstants.COMPILER, new JBossModulesAwareCompiler());
          w2j.run(ctx, stream);
