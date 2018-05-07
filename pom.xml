@@ -62,6 +62,7 @@
   
   <!-- Properties -->
   <properties>
+    <jboss.modules.version>1.7.0.Final</jboss.modules.version>
     <jbossws.api.version>1.1.0.Final</jbossws.api.version>
     <jbossws.spi.version>3.2.0.Final</jbossws.spi.version>
     <jbossws.common.version>3.2.0.Final</jbossws.common.version>
@@ -74,7 +75,10 @@
     <wildfly1100.version>11.0.0.Final</wildfly1100.version>
     <wildfly1110.version>11.1.0.Beta1-SNAPSHOT</wildfly1110.version>
     <ejb.api.version>1.0.2.Final</ejb.api.version>
+    <!-- rls
     <cxf.version>3.2.1</cxf.version>
+    -->
+    <cxf.version>3.2.4</cxf.version> <!-- rls -->
     <cxf.asm.version>5.2</cxf.asm.version>
     <cxf.xjcplugins.version>3.1.0</cxf.xjcplugins.version>
     <jboss-logging.version>3.3.1.Final</jboss-logging.version>
@@ -133,6 +137,11 @@
     <dependencies>
       
       <!-- jbossws dependencies -->
+      <dependency>
+        <groupId>org.jboss.modules</groupId>
+        <artifactId>jboss-modules</artifactId>
+        <version>${jboss.modules.version}</version>
+      </dependency>
       <dependency>
         <groupId>org.jboss.ws</groupId>
         <artifactId>jbossws-common</artifactId>
