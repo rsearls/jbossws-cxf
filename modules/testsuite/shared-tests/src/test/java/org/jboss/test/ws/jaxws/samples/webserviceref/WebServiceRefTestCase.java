@@ -170,18 +170,14 @@ public class WebServiceRefTestCase extends JBossWSTest
    @OperateOnDeployment(DEP_WAR)
    public void testApplicationClient() throws Throwable
    {
-      String additionalJVMArgs = System.getProperty("additionalJvmArgs", "");
-      if ("-Djava.security.manager".equals(additionalJVMArgs)) {
-         // must pass path to policy file for JBossWSTestHelper to access.
-         System.setProperty("securityPolicyfile", JBossWSTestHelper.getTestResourcesDir()
-             + "/jaxws/samples/webserviceref/security.policy");
-      }
-
       try
       {
          final String appclientArg = "Hello World!";
          final OutputStream appclientOS = new ByteArrayOutputStream();
-         JBossWSTestHelper.deployAppclient(fullAppclientDepName, appclientOS, appclientArg);
+         final String securityPolicyFile = JBossWSTestHelper.getTestResourcesDir()
+                 + "/jaxws/samples/webserviceref/security.policy";
+         JBossWSTestHelper.deployAppclient(fullAppclientDepName, appclientOS,
+                 securityPolicyFile, appclientArg);
          // wait till appclient stops
          String appclientLog = appclientOS.toString();
          while (!appclientLog.contains("stopped in")) {

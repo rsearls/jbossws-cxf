@@ -85,9 +85,10 @@ final class AppclientHelper
     * @return
     * @throws Exception
     */
-   static Process deployAppclient(final String archive, final OutputStream appclientOS, final String... appclientArgs) throws Exception
+   static Process deployAppclient(final String archive, final OutputStream appclientOS,
+                                  final String securityPolicyFile, final String... appclientArgs) throws Exception
    {
-      final AppclientProcess ap = newAppclientProcess(archive, appclientOS, appclientArgs);
+      final AppclientProcess ap = newAppclientProcess(archive, appclientOS, securityPolicyFile, appclientArgs);
       final String patternToMatch = "Deployed \"" + getAppclientEarName(archive) + "\"";
       if (!awaitOutput(ap.output, patternToMatch)) {
          throw new RuntimeException("Cannot deploy " + getAppclientFullName(archive) + " to appclient");
@@ -127,7 +128,8 @@ final class AppclientHelper
       }
    }
 
-   private static AppclientProcess newAppclientProcess(final String archive, final OutputStream appclientOS, final String... appclientArgs) throws Exception
+   private static AppclientProcess newAppclientProcess(final String archive, final OutputStream appclientOS,
+                                                       final String securityPolicyFile, final String... appclientArgs) throws Exception
    {
       s.acquire();
       try {
@@ -138,6 +140,14 @@ final class AppclientHelper
          ap.output = new ByteArrayOutputStream();
          final List<String> args = new LinkedList<String>();
          args.add(appclientScript);
+
+         // Check if security manager is to be used
+         String jbossModulesSecmgr = System.getProperty("jbossModulesSecmgr","");
+         if (!jbossModulesSecmgr.isEmpty())
+         {
+            args.add(jbossModulesSecmgr.replace('\n', ' '));
+         }
+
          String appclientConfigName = System.getProperty("APPCLIENT_CONFIG_NAME", "appclient.xml");
          String configArg = "--appclient-config=" + appclientConfigName;
          args.add(configArg);
@@ -159,39 +169,25 @@ final class AppclientHelper
          //we're however still safe, given the ap.output is a ByteArrayOutputStream (whose .close() does nothing), ap.log is explicitly closed at
          //undeploy and closing appclientOS is a caller responsibility.
 
-         ap.log = new FileOutputStream(new File(getAppclientOutputDir(), appclientShortName + ".log-" + System.currentTimeMillis()));
+         ap.log = new FileOutputStream(new File(getAppclientOutputDir(),
+                 appclientShortName + ".log-" + System.currentTimeMillis()));
          @SuppressWarnings("resource")
-         final OutputStream logOutputStreams = (appclientOS == null) ? ap.log : new TeeOutputStream(ap.log, appclientOS);
+         final OutputStream logOutputStreams = (appclientOS == null) ? ap.log
+                 : new TeeOutputStream(ap.log, appclientOS);
          printLogTrailer(logOutputStreams, appclientFullName);
 
          final ProcessBuilder pb = new ProcessBuilder().command(args);
          // always propagate IPv6 related properties
          final StringBuilder javaOptsValue = new StringBuilder();
 
-         // wildfly9 security manage flag changed from -Djava.security.manager to -secmgr.
-         // Can't pass -secmgr arg through arquillian because it breaks arquillian's
-         // config of our tests.
-         // the -secmgr flag MUST be provided as an input arg to jboss-modules so it must
-         // come after the jboss-modules.jar ref.
-         String additionalJVMArgs = System.getProperty("additionalJvmArgs", "");
-         if (additionalJVMArgs != null) {
-
-            if ("-Djava.security.manager".equals(additionalJVMArgs)) {
-               System.setProperty("SECMGR", "true");
-               javaOptsValue.append("-Djava.security.policy="
-                + System.getProperty("securityPolicyfile", "")).append(" ");
-            }
+         if (!jbossModulesSecmgr.isEmpty() && securityPolicyFile != null && !securityPolicyFile.isEmpty()) {
+            javaOptsValue.append("-Djava.security.policy=" + securityPolicyFile).append(" ");
          } else {
             javaOptsValue.append("-Djava.net.preferIPv4Stack=").append(System.getProperty("java.net.preferIPv4Stack", "true")).append(" ");
             javaOptsValue.append("-Djava.net.preferIPv6Addresses=").append(System.getProperty("java.net.preferIPv6Addresses", "false")).append(" ");
          }
          javaOptsValue.append("-Djboss.bind.address=").append(undoIPv6Brackets(System.getProperty("jboss.bind.address", "localhost"))).append(" ");
-         String appclientDebugOpts = System.getProperty("APPCLIENT_DEBUG_OPTS", null);
-         if (appclientDebugOpts != null && appclientDebugOpts.trim().length() > 0)
-         {
-            String acDeubOpts = appclientDebugOpts.replace("-Djava.security.manager", "-secmgr");
-            javaOptsValue.append(acDeubOpts).append(" ");
-         }
+
          pb.environment().put("JAVA_OPTS", javaOptsValue.toString());
          System.out.println("JAVA_OPTS=\"" + javaOptsValue.toString() + "\"");
          System.out.println("Starting " + appclientScript + " " + configArg + " "

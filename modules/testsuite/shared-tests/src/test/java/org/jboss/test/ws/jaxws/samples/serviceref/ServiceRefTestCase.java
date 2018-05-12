@@ -183,17 +183,13 @@ public class ServiceRefTestCase extends JBossWSTest
    @OperateOnDeployment("jaxws-samples-serviceref")
    public void testApplicationClient() throws Exception
    {
-      String additionalJVMArgs = System.getProperty("additionalJvmArgs", "");
-      if ("-Djava.security.manager".equals(additionalJVMArgs)) {
-         // must pass path to policy file for JBossWSTestHelper to access.
-          System.setProperty("securityPolicyfile", JBossWSTestHelper.getTestResourcesDir()
-                  + "/jaxws/samples/serviceref/security.policy");
-      }
-
       try
       {
          final OutputStream appclientOS = new ByteArrayOutputStream();
-         JBossWSTestHelper.deployAppclient(fullAppclientDepName, appclientOS, "Hello World!");
+         final String securityPolicyFile = JBossWSTestHelper.getTestResourcesDir()
+                 + "/jaxws/samples/serviceref/security.policy";
+         JBossWSTestHelper.deployAppclient(fullAppclientDepName, appclientOS,
+                 securityPolicyFile, "Hello World!");
          // wait till appclient stops
          String appclientLog = appclientOS.toString();
          while (!appclientLog.contains("stopped in")) {

@@ -312,6 +312,7 @@
                  <test.password>${test.password}</test.password>
                  <wsdl.publish.location>${wsdl.publish.location}</wsdl.publish.location>
                  <additionalJvmArgs>${additionalJvmArgs}</additionalJvmArgs>
+                 <jbossModulesSecmgr>${jbossModulesSecmgr}</jbossModulesSecmgr>
                  <jboss.version>${jboss.version}</jboss.version>
               </systemPropertyVariables>
             </configuration>
@@ -355,6 +356,7 @@
                  <test.resources.directory>${test.resources.directory}</test.resources.directory>
                  <wsdl.publish.location>${wsdl.publish.location}</wsdl.publish.location>
                  <additionalJvmArgs>${additionalJvmArgs}</additionalJvmArgs>
+                <jbossModulesSecmgr>${jbossModulesSecmgr}</jbossModulesSecmgr>
                  <jboss.version>${jboss.version}</jboss.version>
               </systemPropertyVariables>
             </configuration>
@@ -884,7 +886,7 @@
 
     <!--
     Name:  wildfly9-secmgr
-    Descr: Additional jvm argumetns to add "-secmgr" flag in server start options" 
+    Descr: Additional jvm arguments to add "-secmgr" flag in server start options"
     -->
     <profile>
       <id>wildfly9-secmgr</id>
@@ -895,6 +897,23 @@
       </activation>
       <properties>
           <additionalJvmArgs>-Djava.security.manager</additionalJvmArgs>
+      </properties>
+    </profile>
+    <!--
+    Name:  wfly-secmgr
+    Descr: Cmd-line argument "-secmgr" to be provided as an input argument to scripts
+           appclient, wsconsume, wsprovide.  It causes the wildfly security manager to be used.
+           This option can be used when testing versions wildfly-10 and later.
+    -->
+    <profile>
+      <id>wfly-secmgr</id>
+      <activation>
+        <property>
+          <name>wfly-secmgr</name>
+        </property>
+      </activation>
+      <properties>
+        <jbossModulesSecmgr>-secmgr</jbossModulesSecmgr>
       </properties>
     </profile>
     <!--

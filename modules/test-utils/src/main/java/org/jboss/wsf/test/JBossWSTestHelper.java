@@ -96,9 +96,10 @@ public class JBossWSTestHelper
    /** Deploy the given archive to the appclient.
     * Archive name is always in form archive.ear#appclient.jar
     */
-   public static Process deployAppclient(final String archive, final OutputStream appclientOS, final String... appclientArgs) throws Exception
+   public static Process deployAppclient(final String archive, final OutputStream appclientOS,
+                                         final String securityPolicyFile, final String... appclientArgs) throws Exception
    {
-      return AppclientHelper.deployAppclient(archive, appclientOS, appclientArgs);
+      return AppclientHelper.deployAppclient(archive, appclientOS, securityPolicyFile, appclientArgs);
    }
 
    /** Undeploy the given archive from the appclient
