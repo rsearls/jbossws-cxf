@@ -67,28 +67,26 @@ public class JBWS2591TestCase extends JBossWSTest
    @RunAsClient
    public void testWSConsumeFromCommandLine() throws Exception
    {
+      // Check if security manager is to be used
+      Map<String, String> env = new HashMap<>();
+      String jbossModulesSecmgr = System.getProperty("jbossModulesSecmgr","");
+      if (!jbossModulesSecmgr.isEmpty())
+      {
+         jbossModulesSecmgr = jbossModulesSecmgr.replace('\n', ' ');
+         File policyFile = new File(JBossWSTestHelper.getTestResourcesDir()
+                 + "/jaxws/jbws2591/jbws2591-security.policy");
+         env.put("JAVA_OPTS", " -Djava.security.policy=" + policyFile.getCanonicalPath());
+      }
+
       // use absolute path for the output to be re-usable
       String absWsdlLoc = getResourceFile(WSDL_LOCATION).getAbsolutePath();
       String absOutput = new File(TEST_DIR, "wsconsume" + FS + "java").getAbsolutePath();
-      String command = JBOSS_HOME + FS + "bin" + FS + "wsconsume" + EXT + " -v -k -o " + absOutput + " " + absWsdlLoc;
-
-      // wildfly9 security manager flag changed from -Djava.security.manager to -secmgr.
-      // Can't pass -secmgr arg through arquillian because it breaks arquillian's
-      // config of our tests.
-      // the -secmgr flag MUST be provided as an input arg to jboss-modules so it must
-      // come after the jboss-modules.jar ref.
-      String additionalJVMArgs = System.getProperty("additionalJvmArgs", "");
-      String securityManagerDesignator = additionalJVMArgs.replace("-Djava.security.manager", "-secmgr");
-
-      File policyFile = new File(JBossWSTestHelper.getTestResourcesDir()
-          + "/jaxws/jbws2591/jbws2591-security.policy");
-      String securityPolicyFile = " -Djava.security.policy=" + policyFile.getCanonicalPath();
-
-      Map<String, String> env = new HashMap<>();
-      env.put("JAVA_OPTS", securityManagerDesignator + securityPolicyFile);
+      String command = JBOSS_HOME + FS + "bin" + FS + "wsconsume" + EXT
+              + " " + jbossModulesSecmgr + " -v -k -o " + absOutput + " " + absWsdlLoc;
 
       executeCommand(command, null, "wsconsume", env);
-      File javaSource = new File(TEST_DIR, "wsconsume" + FS + "java" + FS + "org" + FS + "marshalltestservice" + FS + "newschemadefs" + FS + "NewSchemaTest.java");
+      File javaSource = new File(TEST_DIR, "wsconsume" + FS + "java" + FS + "org"
+              + FS + "marshalltestservice" + FS + "newschemadefs" + FS + "NewSchemaTest.java");
       assertTrue("Service endpoint interface not generated", javaSource.exists());
       String contents = readFile(javaSource);
       assertTrue("@XmlList not found", contents.contains("@XmlList"));

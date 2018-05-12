@@ -127,6 +127,15 @@ public class JBWS1666TestCase extends JBossWSTest
       String javaCmd = javaFile.exists() ? javaFile.getCanonicalPath() : "java";
       sbuf.append(javaCmd);
 
+      String jbossModulesSecmgr = System.getProperty("jbossModulesSecmgr","");
+      if (!jbossModulesSecmgr.isEmpty())
+      {
+         jbossModulesSecmgr = jbossModulesSecmgr.replace('\n', ' ');
+         File policyFile = new File(JBossWSTestHelper.getTestResourcesDir() + "/jaxws/cxf/jbws3713/jbws3713-security.policy");
+         String securityPolicyFile = " -Djava.security.policy=" + policyFile.getCanonicalPath();// rls debug
+         sbuf.append(" ").append(" -Djava.security.policy=" + policyFile.getCanonicalPath());
+      }
+
       //properties
       String additionalJVMArgs = System.getProperty("additionalJvmArgs", "");
       additionalJVMArgs =  additionalJVMArgs.replace('\n', ' ');
@@ -137,18 +146,10 @@ public class JBWS1666TestCase extends JBossWSTest
       final String jbm = jbh + FS + "modules";
       final String jbmjar = jbh + FS + "jboss-modules.jar";
       sbuf.append(" -jar ").append(jbmjar);
+      sbuf.append(" ").append(jbossModulesSecmgr);
 
       // input arguments to jboss-module's main
       sbuf.append(" -mp ").append(jbm);
-
-      // wildfly9 security manage flag changed from -Djava.security.manager to -secmgr.
-      // Can't pass -secmgr arg through arquillian because it breaks arquillian's
-      // config of our tests.
-      // the -secmgr flag MUST be provided as an input arg to jboss-modules so it must
-      // come after the jboss-modules.jar ref.
-      if (additionalJVMArgs.contains("-Djava.security.manager")) {
-         sbuf.append(" ").append("-secmgr");
-      }
 
       // our client jar is an input param to jboss-module
       final File f = new File(JBossWSTestHelper.getTestArchiveDir(), clientJar);

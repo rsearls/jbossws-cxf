@@ -41,4 +41,9 @@ if [[ $USE_WFLY_MASTER = "true" ]]; then
   cd $MYPWD
 fi
 
-mvn -s .travis-settings.xml -B -fae -DSECMGR=${SECURITY_MGR} -P${SERVER_VERSION} ${D_SERVER_HOME} integration-test
+WFLY_SECMGR=""
+if [[ $SECURITY_MGR = "true" ]]; then
+WFLY_SECMGR=",wfly-secmgr"
+fi
+
+mvn -s .travis-settings.xml -B -fae -P${SERVER_VERSION}${WFLY_SECMGR} ${D_SERVER_HOME} integration-test

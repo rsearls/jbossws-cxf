@@ -19,6 +19,7 @@ The '-DnoLogRedirect' can be used to prevent Surefire from redirecting console l
 The '-DenableServerLoggingToConsole' can be used to enable logging of server mesages to console too, otherwise these messages are only redirected to specific log files.
 
 The 'fast' profile can also be used to run tests concurrently; run 'mvn -Pfast,wildflyXYZ post-integration-test' in such case to trigger test servers' shutdown and save memory at the end of each testsuite module.
+The 'wfly-secmgr' profile should be used to direct tests that call scripts appclient, wsconsume, and wsprovide to use the wildfly security manager flag -secmgr.
 
 
  Updating WS stack
