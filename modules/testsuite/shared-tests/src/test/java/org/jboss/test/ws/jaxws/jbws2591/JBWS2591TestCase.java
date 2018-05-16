@@ -47,8 +47,7 @@ import org.jboss.wsf.test.JBossWSTestHelper;
 public class JBWS2591TestCase extends JBossWSTest
 {
    private static final String FS = System.getProperty("file.separator"); // '/' on unix, '\' on windows
-   private static final String PS = System.getProperty("path.separator"); // ':' on unix, ';' on windows
-   private static final String EXT = ":".equals(PS) ? ".sh" : ".bat";
+   private static final String EXT = JBossWSTestHelper.getScriptFileExtension();
 
    private String WSDL_LOCATION = "jaxws" + FS + "jbws2591" + FS + "wsdl" + FS + "JBWS2591TestService.wsdl";
 
@@ -69,19 +68,39 @@ public class JBWS2591TestCase extends JBossWSTest
    {
       // Check if security manager is to be used
       Map<String, String> env = new HashMap<>();
-      String jbossModulesSecmgr = System.getProperty("jbossModulesSecmgr","");
-      if (!jbossModulesSecmgr.isEmpty())
+      // flag for passing new style and old style script settings
+      boolean isWildfly13Plus = JBossWSTestHelper.isTargetWildFly13Plus();
+      String jbossModulesSecmgr = "";
+      if (isWildfly13Plus)
       {
-         jbossModulesSecmgr = jbossModulesSecmgr.replace('\n', ' ');
-         File policyFile = new File(JBossWSTestHelper.getTestResourcesDir()
-                 + "/jaxws/jbws2591/jbws2591-security.policy");
-         env.put("JAVA_OPTS", " -Djava.security.policy=" + policyFile.getCanonicalPath());
+         jbossModulesSecmgr = System.getProperty("jbossModulesSecmgr", "");
+         if (!jbossModulesSecmgr.isEmpty())
+         {
+            jbossModulesSecmgr = jbossModulesSecmgr.replace('\n', ' ');
+            File policyFile = new File(JBossWSTestHelper.getTestResourcesDir()
+                    + "/jaxws/jbws2591/jbws2591-security.policy");
+            env.put("JAVA_OPTS", " -Djava.security.policy=" + policyFile.getCanonicalPath());
+         }
+      } else
+      {
+         String additionalJVMArgs = System.getProperty("additionalJvmArgs", "");
+         String revisedAdditionalJVMArgs = additionalJVMArgs;
+         if (additionalJVMArgs.contains("-Djava.security.manager")) {
+            String securityManagerDesignator = additionalJVMArgs.replace("-Djava.security.manager", "-secmgr");
+            File policyFile = new File(JBossWSTestHelper.getTestResourcesDir()
+                    + "/jaxws/jbws2591/jbws2591-security.policy");
+            String securityPolicyFile = " -Djava.security.policy=" + policyFile.getCanonicalPath();
+            revisedAdditionalJVMArgs = securityPolicyFile + " " + securityManagerDesignator + " ";
+         }
+
+         env.put("JAVA_OPTS", revisedAdditionalJVMArgs);
       }
 
       // use absolute path for the output to be re-usable
       String absWsdlLoc = getResourceFile(WSDL_LOCATION).getAbsolutePath();
       String absOutput = new File(TEST_DIR, "wsconsume" + FS + "java").getAbsolutePath();
-      String command = JBOSS_HOME + FS + "bin" + FS + "wsconsume" + EXT
+      String command = ((".ps1".equals(EXT)) ? "powershell.exe  " : "")
+              + JBOSS_HOME + FS + "bin" + FS + "wsconsume" + EXT
               + " " + jbossModulesSecmgr + " -v -k -o " + absOutput + " " + absWsdlLoc;
 
       executeCommand(command, null, "wsconsume", env);

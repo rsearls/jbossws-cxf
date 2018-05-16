@@ -313,6 +313,7 @@
                  <wsdl.publish.location>${wsdl.publish.location}</wsdl.publish.location>
                  <additionalJvmArgs>${additionalJvmArgs}</additionalJvmArgs>
                  <jbossModulesSecmgr>${jbossModulesSecmgr}</jbossModulesSecmgr>
+                 <winPowerShell>${winPowerShell}</winPowerShell>
                  <jboss.version>${jboss.version}</jboss.version>
               </systemPropertyVariables>
             </configuration>
@@ -356,7 +357,8 @@
                  <test.resources.directory>${test.resources.directory}</test.resources.directory>
                  <wsdl.publish.location>${wsdl.publish.location}</wsdl.publish.location>
                  <additionalJvmArgs>${additionalJvmArgs}</additionalJvmArgs>
-                <jbossModulesSecmgr>${jbossModulesSecmgr}</jbossModulesSecmgr>
+                 <jbossModulesSecmgr>${jbossModulesSecmgr}</jbossModulesSecmgr>
+                 <winPowerShell>${winPowerShell}</winPowerShell>
                  <jboss.version>${jboss.version}</jboss.version>
               </systemPropertyVariables>
             </configuration>
@@ -934,6 +936,26 @@
       </activation>
       <properties>
         <jbossModulesSecmgr>-secmgr</jbossModulesSecmgr>
+      </properties>
+    </profile>
+
+    <!--
+    Name:   winPowerShell
+    Descr:  Several tests run cmd-line scripts.  On Windows .bat and ps1 script
+            extensions are supported.  There is no way to programmatically determine
+            which shell is being used.  The default Windows script shell is
+            "Command Prompt", .bat.  This flag causes the PowerShell script
+            extension, .ps1, to be used.
+    -->
+    <profile>
+      <id>winPowerShell</id>
+      <activation>
+        <property>
+          <name>winPowerShell</name>
+        </property>
+      </activation>
+      <properties>
+        <winPowerShell>true</winPowerShell>
       </properties>
     </profile>
     <!--

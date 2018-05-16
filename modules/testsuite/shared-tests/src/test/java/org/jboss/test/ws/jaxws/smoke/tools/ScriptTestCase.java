@@ -29,6 +29,7 @@ import org.jboss.wsf.test.JBossWSTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.jboss.wsf.test.JBossWSTestHelper;
 
 /**
  * [JBWS-1793] Provide a test case for the tools scripts that reside under JBOSS_HOME/bin
@@ -46,7 +47,7 @@ public class ScriptTestCase extends JBossWSTest
 {
    public static final String FS = System.getProperty("file.separator"); // '/' on unix, '\' on windows
    public static final String PS = System.getProperty("path.separator"); // ':' on unix, ';' on windows
-   public static final String EXT = ":".equals( PS ) ? ".sh" : ".bat";
+   public static final String EXT = JBossWSTestHelper.getScriptFileExtension();
 
    public String ENDPOINT_CLASS;
 

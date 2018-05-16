@@ -140,18 +140,35 @@ public class ClientBusStrategyTestCase extends JBossWSTest
       String javaCmd = javaFile.exists() ? javaFile.getCanonicalPath() : "java";
       sbuf.append(javaCmd);
 
-      String jbossModulesSecmgr = System.getProperty("jbossModulesSecmgr","");
-      if (!jbossModulesSecmgr.isEmpty())
+      String additionalJVMArgs = System.getProperty("additionalJvmArgs", "");
+      // flag for passing new style and old style script settings
+      boolean isWildfly13Plus = JBossWSTestHelper.isTargetWildFly13Plus();
+      String jbossModulesSecmgr = "";
+      if (isWildfly13Plus)
       {
-         jbossModulesSecmgr = jbossModulesSecmgr.replace('\n', ' ');
-         File policyFile = new File(JBossWSTestHelper.getTestResourcesDir() + "/jaxws/cxf/jbws3713/jbws3713-security.policy");
-         sbuf.append(" ").append(" -Djava.security.policy=" + policyFile.getCanonicalPath());
+         jbossModulesSecmgr = System.getProperty("jbossModulesSecmgr", "");
+         if (!jbossModulesSecmgr.isEmpty())
+         {
+            jbossModulesSecmgr = jbossModulesSecmgr.replace('\n', ' ');
+            File policyFile = new File(JBossWSTestHelper.getTestResourcesDir()
+                    + "/jaxws/cxf/jbws3713/jbws3713-security.policy");
+            sbuf.append(" ").append(" -Djava.security.policy=" + policyFile.getCanonicalPath());
+         }
+      } else {
+
+         additionalJVMArgs =  additionalJVMArgs.replace('\n', ' ');
+
+         if (additionalJVMArgs.contains("-Djava.security.manager")) {
+            File policyFile = new File(JBossWSTestHelper.getTestResourcesDir()
+                    + "/jaxws/cxf/jbws3713/jbws3713-security.policy");
+            sbuf.append(" ").append(" -Djava.security.policy=" + policyFile.getCanonicalPath());
+            sbuf.append(" ");
+         } else {
+            sbuf.append(" ").append(additionalJVMArgs);
+         }
       }
 
       //properties
-      String additionalJVMArgs = System.getProperty("additionalJvmArgs", "");
-      additionalJVMArgs =  additionalJVMArgs.replace('\n', ' ');
-      sbuf.append(" ").append(additionalJVMArgs);
       sbuf.append(" -Djavax.xml.ws.spi.Provider=").append(ProviderImpl.class.getName());
       sbuf.append(" -Dlog4j.output.dir=").append(System.getProperty("log4j.output.dir"));
       sbuf.append(" -D").append(Constants.JBWS_CXF_JAXWS_CLIENT_BUS_STRATEGY).append("=").append(strategy);
@@ -161,7 +178,21 @@ public class ClientBusStrategyTestCase extends JBossWSTest
       final String jbm = jbh + FS + "modules";
       final String jbmjar = jbh + FS + "jboss-modules.jar";
       sbuf.append(" -jar ").append(jbmjar);
-      sbuf.append(" ").append(jbossModulesSecmgr);
+
+      if (isWildfly13Plus)
+      {
+         sbuf.append(" ").append(jbossModulesSecmgr);
+      } else {
+
+         // wildfly9 security manage flag changed from -Djava.security.manager to -secmgr.
+         // Can't pass -secmgr arg through arquillian because it breaks arquillian's
+         // config of our tests.
+         // the -secmgr flag MUST be provided as an input arg to jboss-modules so it must
+         // come after the jboss-modules.jar ref.
+         if (additionalJVMArgs.contains("-Djava.security.manager")) {
+            sbuf.append(" ").append("-secmgr");
+         }
+      }
 
       // input arguments to jboss-module's main
       sbuf.append(" -mp ").append(jbm);

@@ -29,6 +29,7 @@ import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.jboss.wsf.test.JBossWSTestHelper;
 
 /**
  * [JBWS-1793] Provide a test case for the tools scripts that reside under JBOSS_HOME/bin
@@ -50,23 +51,46 @@ public class WSConsumeScriptTestCase extends org.jboss.test.ws.jaxws.smoke.tools
    @RunAsClient
    public void testWSConsumeFromCommandLine() throws Exception
    {
+      Map<String, String> env = new HashMap<>();
+      // flag for passing new style and old style script settings
+      boolean isWildfly13Plus = JBossWSTestHelper.isTargetWildFly13Plus();
+      String jbossModulesSecmgr = "";
+      if (isWildfly13Plus)
+      {
+         jbossModulesSecmgr = System.getProperty("jbossModulesSecmgr", "");
+         if (!jbossModulesSecmgr.isEmpty())
+         {
+            jbossModulesSecmgr = jbossModulesSecmgr.replace('\n', ' ');
+            File policyFile = new File(JBossWSTestHelper.getTestResourcesDir()
+                    + "/jaxws/smoke/tools/WSProvideScriptTestCase-security.policy");
+            env.put("JAVA_OPTS", " -Djava.security.policy=" + policyFile.getCanonicalPath());
+         }
+      } else {
+
+         String additionalJVMArgs = System.getProperty("additionalJvmArgs", "");
+         String revisedAdditionalJVMArgs = additionalJVMArgs;
+         if (additionalJVMArgs.contains("-Djava.security.manager")) {
+            String securityManagerDesignator = additionalJVMArgs.replace("-Djava.security.manager", "-secmgr");
+            File policyFile = new File(JBossWSTestHelper.getTestResourcesDir() +  "/jaxws/smoke/tools/WSProvideScriptTestCase-security.policy");
+            String securityPolicyFile = " -Djava.security.policy=" + policyFile.getCanonicalPath();
+            revisedAdditionalJVMArgs = securityPolicyFile + " " + securityManagerDesignator + " ";
+         }
+
+         env.put("JAVA_OPTS", revisedAdditionalJVMArgs);
+      }
+
       // use absolute path for the output to be re-usable
       String absWsdlLoc = getResourceFile(WSDL_LOCATION).getAbsolutePath();
       String absOutput = new File(TEST_DIR, "wsconsume" + FS + "java").getAbsolutePath();
-      String command = JBOSS_HOME + FS + "bin" + FS + "wsconsume" + EXT + " -v -k -o " + absOutput + " " + absWsdlLoc;
 
-      // wildfly9 security manager flag changed from -Djava.security.manager to -secmgr.
-      // Can't pass -secmgr arg through arquillian because it breaks arquillian's
-      // config of our tests.
-      // the -secmgr flag MUST be provided as an input arg to jboss-modules so it must
-      // come after the jboss-modules.jar ref.
-      String additionalJVMArgs = System.getProperty("additionalJvmArgs", "");
-      String securityManagerDesignator = additionalJVMArgs.replace("-Djava.security.manager", "-secmgr");
+      String command = ((".ps1".equals(EXT)) ? "powershell.exe  " : "")
+              + JBOSS_HOME + FS + "bin" + FS + "wsconsume" + EXT
+              + " " + jbossModulesSecmgr + " -v -k -o " + absOutput + " " + absWsdlLoc;
 
-      Map<String, String> env = new HashMap<>();
-      env.put("JAVA_OPTS", securityManagerDesignator);
       executeCommand(command, null, "wsconsume", env);
-      File javaSource = new File(TEST_DIR, "wsconsume" + FS + "java" + FS + "org" + FS + "openuri" + FS + "_2004" + FS + "_04" + FS + "helloworld" + FS + "EndpointInterface.java");
+
+      File javaSource = new File(TEST_DIR, "wsconsume" + FS + "java" + FS + "org" + FS + "openuri" + FS
+              + "_2004" + FS + "_04" + FS + "helloworld" + FS + "EndpointInterface.java");
       assertTrue("Service endpoint interface not generated", javaSource.exists());
    }
 }

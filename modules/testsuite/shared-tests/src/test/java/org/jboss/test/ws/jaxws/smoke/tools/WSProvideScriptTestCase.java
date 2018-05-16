@@ -49,26 +49,43 @@ public class WSProvideScriptTestCase extends org.jboss.test.ws.jaxws.smoke.tools
    @RunAsClient
    public void testWSProvideFromCommandLine() throws Exception
    {
-      String absOutput = new File(TEST_DIR, "wsprovide" + FS + "java").getAbsolutePath();
-      String command = JBOSS_HOME + FS + "bin" + FS + "wsprovide" + EXT + " -k -w -o " + absOutput + " --classpath " + CLASSES_DIR + " " + ENDPOINT_CLASS;
-
-      // wildfly9 security manager flag changed from -Djava.security.manager to -secmgr.
-      // Can't pass -secmgr arg through arquillian because it breaks arquillian's
-      // config of our tests.
-      // the -secmgr flag MUST be provided as an input arg to jboss-modules so it must
-      // come after the jboss-modules.jar ref.
-      String additionalJVMArgs = System.getProperty("additionalJvmArgs", "");
-      String securityManagerDesignator = additionalJVMArgs.replace("-Djava.security.manager", "-secmgr");
-
-      File policyFile = new File(JBossWSTestHelper.getTestResourcesDir()
-          + "/jaxws/smoke/tools/WSProvideScriptTestCase-security.policy");
-      String securityPolicyFile = " -Djava.security.policy=" + policyFile.getCanonicalPath();
-
       Map<String, String> env = new HashMap<>();
-      env.put("JAVA_OPTS", securityManagerDesignator + securityPolicyFile);
+      // flag for passing new style and old style script settings
+      boolean isWildfly13Plus = JBossWSTestHelper.isTargetWildFly13Plus();
+      String jbossModulesSecmgr = "";
+      if (isWildfly13Plus)
+      {
+         jbossModulesSecmgr = System.getProperty("jbossModulesSecmgr", "");
+         if (!jbossModulesSecmgr.isEmpty())
+         {
+            jbossModulesSecmgr = jbossModulesSecmgr.replace('\n', ' ');
+            File policyFile = new File(JBossWSTestHelper.getTestResourcesDir()
+                    + "/jaxws/smoke/tools/WSProvideScriptTestCase-security.policy");
+            env.put("JAVA_OPTS", " -Djava.security.policy=" + policyFile.getCanonicalPath());
+         }
+      } else {
+
+         String additionalJVMArgs = System.getProperty("additionalJvmArgs", "");
+         String revisedAdditionalJVMArgs = additionalJVMArgs;
+         if (additionalJVMArgs.contains("-Djava.security.manager")) {
+            String securityManagerDesignator = additionalJVMArgs.replace("-Djava.security.manager", "-secmgr");
+            File policyFile = new File(JBossWSTestHelper.getTestResourcesDir() +  "/jaxws/smoke/tools/WSProvideScriptTestCase-security.policy");
+            String securityPolicyFile = " -Djava.security.policy=" + policyFile.getCanonicalPath();
+            revisedAdditionalJVMArgs = securityPolicyFile + " " + securityManagerDesignator + " ";
+         }
+
+         env.put("JAVA_OPTS", revisedAdditionalJVMArgs);
+      }
+
+      String absOutput = new File(TEST_DIR, "wsprovide" + FS + "java").getAbsolutePath();
+      String command = ((".ps1".equals(EXT)) ? "powershell.exe  " : "")
+              + JBOSS_HOME + FS + "bin" + FS + "wsprovide" + EXT
+              + " " + jbossModulesSecmgr + " -k -w -o " + absOutput
+              + " --classpath " + CLASSES_DIR + " " + ENDPOINT_CLASS;
 
       executeCommand(command, null, "wsprovide", env);
-      File javaSource = new File(TEST_DIR, "wsprovide" + FS + "java" + FS + "org" + FS + "jboss" + FS + "test" + FS + "ws" + FS + "jaxws" + FS + "smoke" + FS + "tools" + FS + "jaxws" + FS + "AddResponse.java");
+      File javaSource = new File(TEST_DIR, "wsprovide" + FS + "java" + FS + "org" + FS + "jboss" + FS
+              + "test" + FS + "ws" + FS + "jaxws" + FS + "smoke" + FS + "tools" + FS + "jaxws" + FS + "AddResponse.java");
       assertTrue("Response wrapper not generated", javaSource.exists());
    }
 

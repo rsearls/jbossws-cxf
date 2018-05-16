@@ -53,9 +53,8 @@ final class AppclientHelper
 
    private static final String JBOSS_HOME = System.getProperty("jboss.home");
    private static final String FS = System.getProperty("file.separator"); // '/' on unix, '\' on windows
-   private static final String PS = System.getProperty("path.separator"); // ':' on unix, ';' on windows
    private static final int TIMEOUT = Integer.getInteger("appclient.timeout", 120);
-   private static final String EXT = ":".equals(PS) ? ".sh" : ".bat";
+   private static final String EXT = JBossWSTestHelper.getScriptFileExtension();
    private static final String appclientScript = JBOSS_HOME + FS + "bin" + FS + "appclient" + EXT;
    private static final Semaphore s = new Semaphore(1, true); //one appclient only can be running at the same time ATM
    private static Map<String, AppclientProcess> appclients = Collections.synchronizedMap(new HashMap<String, AppclientProcess>(2));
@@ -129,9 +128,17 @@ final class AppclientHelper
    }
 
    private static AppclientProcess newAppclientProcess(final String archive, final OutputStream appclientOS,
-                                                       final String securityPolicyFile, final String... appclientArgs) throws Exception
+                                                       final String secPolicyFile, final String... appclientArgs) throws Exception
    {
       s.acquire();
+
+      String securityPolicyFile = secPolicyFile;
+      if (!".sh".equals(EXT)) {
+         if (secPolicyFile != null && !secPolicyFile.isEmpty()) {
+            securityPolicyFile = secPolicyFile.replace("/", "\\");
+         }
+      }
+
       try {
          final String killFileName = getKillFileName(archive);
          final String appclientFullName = getAppclientFullName(archive);
@@ -139,17 +146,33 @@ final class AppclientHelper
          final AppclientProcess ap = new AppclientProcess();
          ap.output = new ByteArrayOutputStream();
          final List<String> args = new LinkedList<String>();
+         if (".ps1".equals(EXT)) {
+            args.add("powershell.exe");
+         }
          args.add(appclientScript);
 
+         // flag for passing new style and old style script settings
+         boolean isWildfly13Plus = JBossWSTestHelper.isTargetWildFly13Plus();
          // Check if security manager is to be used
-         String jbossModulesSecmgr = System.getProperty("jbossModulesSecmgr","");
-         if (!jbossModulesSecmgr.isEmpty())
+         String jbossModulesSecmgr = "";
+         if (isWildfly13Plus)
          {
-            args.add(jbossModulesSecmgr.replace('\n', ' '));
+            jbossModulesSecmgr = System.getProperty("jbossModulesSecmgr", "");
+            if (!jbossModulesSecmgr.isEmpty())
+            {
+               args.add(jbossModulesSecmgr.replace('\n', ' '));
+            }
          }
 
          String appclientConfigName = System.getProperty("APPCLIENT_CONFIG_NAME", "appclient.xml");
-         String configArg = "--appclient-config=" + appclientConfigName;
+         String configArg = null;
+
+         if (".sh".equals(EXT)) {
+            configArg = "--appclient-config=" + appclientConfigName;
+         } else {
+            configArg = "\"" + "--appclient-config=" + appclientConfigName + "\"";
+         }
+
          args.add(configArg);
          args.add(appclientFullName);
          if (appclientOS == null)
@@ -176,16 +199,46 @@ final class AppclientHelper
                  : new TeeOutputStream(ap.log, appclientOS);
          printLogTrailer(logOutputStreams, appclientFullName);
 
+         // rls debug info only
+         StringBuilder sb = new StringBuilder();
+         for (String s : args) {
+            sb.append(s).append("  ");
+         }
+         String tmpSB = sb.toString();
+
          final ProcessBuilder pb = new ProcessBuilder().command(args);
          // always propagate IPv6 related properties
          final StringBuilder javaOptsValue = new StringBuilder();
 
-         if (!jbossModulesSecmgr.isEmpty() && securityPolicyFile != null && !securityPolicyFile.isEmpty()) {
-            javaOptsValue.append("-Djava.security.policy=" + securityPolicyFile).append(" ");
+         if (isWildfly13Plus) {
+            if (!jbossModulesSecmgr.isEmpty() && securityPolicyFile != null && !securityPolicyFile.isEmpty()) {
+               javaOptsValue.append("-Djava.security.policy=" + securityPolicyFile).append(" ");
+            } else {
+               javaOptsValue.append("-Djava.net.preferIPv4Stack=").append(System.getProperty("java.net.preferIPv4Stack", "true")).append(" ");
+               javaOptsValue.append("-Djava.net.preferIPv6Addresses=").append(System.getProperty("java.net.preferIPv6Addresses", "false")).append(" ");
+            }
          } else {
-            javaOptsValue.append("-Djava.net.preferIPv4Stack=").append(System.getProperty("java.net.preferIPv4Stack", "true")).append(" ");
-            javaOptsValue.append("-Djava.net.preferIPv6Addresses=").append(System.getProperty("java.net.preferIPv6Addresses", "false")).append(" ");
+            // wildfly9 security manage flag changed from -Djava.security.manager to -secmgr.
+            // Can't pass -secmgr arg through arquillian because it breaks arquillian's
+            // config of our tests.
+            // the -secmgr flag MUST be provided as an input arg to jboss-modules so it must
+            // come after the jboss-modules.jar ref.
+            String additionalJVMArgs = System.getProperty("additionalJvmArgs", "");
+            if (additionalJVMArgs != null) {
+
+               if ("-Djava.security.manager".equals(additionalJVMArgs)) {
+                   pb.environment().put("SECMGR", "true");
+                  if (securityPolicyFile != null && !securityPolicyFile.isEmpty())
+                  {
+                     javaOptsValue.append("-Djava.security.policy=" + securityPolicyFile).append(" ");
+                  }
+               }
+            } else {
+               javaOptsValue.append("-Djava.net.preferIPv4Stack=").append(System.getProperty("java.net.preferIPv4Stack", "true")).append(" ");
+               javaOptsValue.append("-Djava.net.preferIPv6Addresses=").append(System.getProperty("java.net.preferIPv6Addresses", "false")).append(" ");
+            }
          }
+
          javaOptsValue.append("-Djboss.bind.address=").append(undoIPv6Brackets(System.getProperty("jboss.bind.address", "localhost"))).append(" ");
 
          pb.environment().put("JAVA_OPTS", javaOptsValue.toString());

@@ -20,7 +20,7 @@ The '-DenableServerLoggingToConsole' can be used to enable logging of server mes
 
 The 'fast' profile can also be used to run tests concurrently; run 'mvn -Pfast,wildflyXYZ post-integration-test' in such case to trigger test servers' shutdown and save memory at the end of each testsuite module.
 The 'wfly-secmgr' profile should be used to direct tests that call scripts appclient, wsconsume, and wsprovide to use the wildfly security manager flag -secmgr.
-
+The 'winPowerShell' profile should be used when run tests in Windows PowerShell.
 
  Updating WS stack
 -------------------

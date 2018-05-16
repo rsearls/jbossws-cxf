@@ -93,6 +93,11 @@ public class JBossWSTestHelper
       implInfo = obj.getClass().getPackage().getName();
    }
 
+   private static final String FS = System.getProperty("file.separator"); // '/' on unix, '\' on windows
+   private static final String PS = System.getProperty("path.separator"); // ':' on unix, ';' on windows
+   private static final String winPowerShell = System.getProperty("winPowerShell", "");
+
+
    /** Deploy the given archive to the appclient.
     * Archive name is always in form archive.ear#appclient.jar
     */
@@ -120,6 +125,61 @@ public class JBossWSTestHelper
    {
        String target = getIntegrationTarget();
        return target.startsWith("wildfly10");
+   }
+
+   /**
+    * Three script file types are used. Unix (.sh), Windows Command (.bat)
+    * and PowerShell (.ps1).  Determine which file extension to use.
+    * @return
+    */
+   public static String getScriptFileExtension() {
+
+      // Script can run in Windows powershell (.ps1) or command prompt (.bat)
+      // Each shell determines which file extension to use.  DON'T specify one.
+      // Allow the shell to determine it.
+      String EXT = ".sh"; // unix most frequent
+      // identify which Windows shell type.
+      if (";".equals(PS)) {
+         if (winPowerShell.isEmpty())
+         {
+            EXT = ".bat";
+         } else {
+            EXT = ".ps1";
+         }
+      }
+      return EXT;
+   }
+
+   /**
+    * Determine of target wildfly version is 1300 or newer.
+    * @param target
+    * @return
+    */
+   public static boolean isTargetWildFly13Plus() throws NumberFormatException {
+      String target = getIntegrationTarget();
+
+      if (target.startsWith("wildfly"))
+      {
+         String targetVersion = target.replace("wildfly", "");
+         try
+         {
+            int value = Integer.valueOf(targetVersion);
+            if (value >= 1300)
+            {
+               //System.out.println(target + " is >= 1300");
+               return true;
+            } else
+            {
+               //System.out.println(target + " is NOT >= 1300");
+               return false;
+            }
+         } catch(NumberFormatException e) {
+            throw new NumberFormatException(targetVersion + " in " + target);
+         }
+      }
+
+      return false;
+
    }
 
    public static boolean isIntegrationCXF()
@@ -355,12 +415,12 @@ public class JBossWSTestHelper
       if (file.exists())
          return file;
 
-      file = new File(getTestResourcesDir() + "/" + resource);
+      file = new File(getTestResourcesDir() + FS + resource);
       if (file.exists())
          return file;
 
       String notSet = (getTestResourcesDir() == null ? " System property '" + SYSPROP_TEST_RESOURCES_DIRECTORY + "' not set." : "");
-      throw new IllegalArgumentException("Cannot obtain '" + getTestResourcesDir() + "/" + resource + "'." + notSet);
+      throw new IllegalArgumentException("Cannot obtain '" + getTestResourcesDir() + FS + resource + "'." + notSet);
    }
 
    public static String getTestArchiveDir()
