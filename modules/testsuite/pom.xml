@@ -958,6 +958,7 @@
         <winPowerShell>true</winPowerShell>
       </properties>
     </profile>
+
     <!--
     Name:  exclude-integration-tests-BC-related
     Descr: Additional exclusions of integration tests which require installed JCE Provider Bouncy Castle (AS 7.x)

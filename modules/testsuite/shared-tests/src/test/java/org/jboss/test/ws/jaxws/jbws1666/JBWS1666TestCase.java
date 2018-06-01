@@ -131,7 +131,6 @@ public class JBWS1666TestCase extends JBossWSTest
       String javaCmd = javaFile.exists() ? javaFile.getCanonicalPath() : "java";
       sbuf.append(javaCmd);
 
-
       String additionalJVMArgs = System.getProperty("additionalJvmArgs", "");
       // flag for passing new style and old style script settings
       boolean isWildfly13Plus = JBossWSTestHelper.isTargetWildFly13Plus();
@@ -169,6 +168,7 @@ public class JBWS1666TestCase extends JBossWSTest
       final String jbm = jbh + FS + "modules";
       final String jbmjar = jbh + FS + "jboss-modules.jar";
       sbuf.append(" -jar ").append(jbmjar);
+      sbuf.append(" ").append(jbossModulesSecmgr);
 
       if (isWildfly13Plus)
       {

@@ -68,6 +68,7 @@ public class JBWS2591TestCase extends JBossWSTest
    {
       // Check if security manager is to be used
       Map<String, String> env = new HashMap<>();
+
       // flag for passing new style and old style script settings
       boolean isWildfly13Plus = JBossWSTestHelper.isTargetWildFly13Plus();
       String jbossModulesSecmgr = "";
@@ -99,6 +100,7 @@ public class JBWS2591TestCase extends JBossWSTest
       // use absolute path for the output to be re-usable
       String absWsdlLoc = getResourceFile(WSDL_LOCATION).getAbsolutePath();
       String absOutput = new File(TEST_DIR, "wsconsume" + FS + "java").getAbsolutePath();
+
       String command = ((".ps1".equals(EXT)) ? "powershell.exe  " : "")
               + JBOSS_HOME + FS + "bin" + FS + "wsconsume" + EXT
               + " " + jbossModulesSecmgr + " -v -k -o " + absOutput + " " + absWsdlLoc;

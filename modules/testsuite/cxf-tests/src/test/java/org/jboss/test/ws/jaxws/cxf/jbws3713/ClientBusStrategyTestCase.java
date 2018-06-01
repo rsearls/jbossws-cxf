@@ -178,7 +178,6 @@ public class ClientBusStrategyTestCase extends JBossWSTest
       final String jbm = jbh + FS + "modules";
       final String jbmjar = jbh + FS + "jboss-modules.jar";
       sbuf.append(" -jar ").append(jbmjar);
-
       if (isWildfly13Plus)
       {
          sbuf.append(" ").append(jbossModulesSecmgr);

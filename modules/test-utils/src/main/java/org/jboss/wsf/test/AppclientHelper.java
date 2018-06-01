@@ -129,6 +129,7 @@ final class AppclientHelper
 
    private static AppclientProcess newAppclientProcess(final String archive, final OutputStream appclientOS,
                                                        final String secPolicyFile, final String... appclientArgs) throws Exception
+
    {
       s.acquire();
 
