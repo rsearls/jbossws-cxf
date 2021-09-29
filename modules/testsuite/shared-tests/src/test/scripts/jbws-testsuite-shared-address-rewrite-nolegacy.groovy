@@ -10,6 +10,7 @@ if (!session.userProperties['enableServerLoggingToConsole'] && !project.properti
 def file = root.profile.subsystem.'periodic-rotating-file-handler'.file[0]
 file.attributes()['path'] = serverLog
 
+
 /**
  * Helper method to get subsystem element by xmlns prefix
  */
@@ -49,12 +50,8 @@ def realm = securityDomain.appendNode('realm',['name':'JBossWS','role-decoder':'
  *        <groups-properties path="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/jbossws-roles.properties"/>
  *     </properties-realm>
 */
-def securityRealms = null
-for (element in securitySubsystem) {
-    if (element.name().getLocalPart() == 'security-realms') {
-        securityRealms = element
-    }
-}
+println "## start securityRealms"
+def securityRealms = root.profile.subsystem.'security-realms'[0]
 def propertiesRealm = securityRealms.appendNode('properties-realm', ['name':'JBossWS'])
 def usersProperties = propertiesRealm.appendNode('users-properties',['path':usersPropFile, 'plain-text':'true'])
 def groupsProperties = propertiesRealm.appendNode('groups-properties',['path':rolesPropFile])
@@ -79,12 +76,45 @@ def mechanismConfiguration = httpAuthenticationFactory.appendNode('mechanism-con
 def mechanism = mechanismConfiguration.appendNode('mechanism',['mechanism-name':'BASIC'])
 def mechanismRealm=mechanism.appendNode('mechanism-realm',['realm-name':'JBossWS'])
 
+/**
+ * Add a https connector like this:
+ *
+ * <security-realm name="jbws-test-https-realm">
+ *    <server-identities>
+ *        <ssl>
+ *             <keystore path="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/test.keystore" keystore-password="changeit" alias="tomcat"/>
+ *        </ssl>
+ *    </server-identities>
+ * </security-realm>
+ *
+ */
+println "## start securityRealms"
+/*******
+def secRealms = root.management.'security-realms'[0]
+def secRealm = secRealms.appendNode('security-realm', ['name':'jbws-test-https-realm'])
+def serverIdentities = secRealm.appendNode('server-identities')
+def ssl = serverIdentities.appendNode('ssl')
+ssl.appendNode('keystore', ['path':keystorePath,'keystore-password':'changeit','alias':'tomcat'])
 
-//add to undertow
-def undertowSubsystem = getSubsystem(root, "urn:jboss:domain:undertow:")
+def server = root.profile.subsystem.server[0]
+def curHttpsListener = server.'https-listener'[0]
+if (curHttpsListener != null) server.remove(curHttpsListener)
+server.appendNode('https-listener', ['name':'jbws-test-https-listener','socket-binding':'https','security-realm':'jbws-test-https-realm'])
+*********/
+def tls = null
+for (element in securitySubsystem) {
+    if (element.name().getLocalPart() == 'tls') {
+        tls = element
+    }
+}
 
-def undertowAppSecurityDomains = undertowSubsystem.'application-security-domains'[0]
-def appSecurityDomain = undertowAppSecurityDomains.appendNode('application-security-domain', ['name':'JBossWS','http-authentication-factory':'JBossWS'])
+tls.'key-stores'.'key-store'[0].'credential-reference'.@'clear-text' = "changeit"
+tls.'key-stores'.'key-store'[0].file.@path = keystorePath
+tls.'key-stores'.'key-store'[0].file[0].attributes().remove('relative-to')
+
+tls.'key-managers'.'key-manager'[0].'credential-reference'.@'clear-text' = "changeit"
+tls.'key-managers'.'key-manager'[0].@'alias-filter' = "tomcat"
+
 
 /**
  * Save the configuration to a new file

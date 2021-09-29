@@ -4,16 +4,10 @@ def root = new XmlParser().parse(inputFile)
  * Fix logging: optionally remove CONSOLE handler and set a specific log file
  *
  */
-println "### before root-logger"
 def logHandlers = root.profile.subsystem.'root-logger'.handlers[0]
-println "### before CONSOLE"
 def consoleHandler = logHandlers.find{it.@name == 'CONSOLE'}
-/* rls test start
 if (!session.userProperties['enableServerLoggingToConsole'] && !project.properties['enableServerLoggingToConsole']) logHandlers.remove(consoleHandler)
-rls test end */
-println "### before periodic-rotating-file-handler"
 def file = root.profile.subsystem.'periodic-rotating-file-handler'.file[0]
-println "### before path"
 file.attributes()['path'] = serverLog
 
 /**
@@ -43,7 +37,6 @@ private getSubsystem(root, xmlnsPrefix) {
  *
  */
 def securitySubsystem =  getSubsystem(root, "urn:wildfly:elytron:")
-println "### after urn:wildfly:elytron:"
 def securityDomains = null
 for (element in securitySubsystem) {
     if (element.name().getLocalPart() == 'security-domains') {

@@ -7,9 +7,7 @@ def root = new XmlParser().parse(inputFile)
 
 def logHandlers = root.profile.subsystem.'root-logger'.handlers[0]
 def consoleHandler = logHandlers.find{it.@name == 'CONSOLE'}
-/*
 if (!session.userProperties['enableServerLoggingToConsole'] && !project.properties['enableServerLoggingToConsole']) logHandlers.remove(consoleHandler)
-*/
 def file = root.profile.subsystem.'periodic-rotating-file-handler'.file[0]
 file.attributes()['path'] = serverLog
 
@@ -364,7 +362,7 @@ elytronRealms.appendNode('elytron-realm', ['name':'JAASJBossWSDigestRealm','lega
             </key-store>
         </key-stores>
         <key-managers>
-            <key-manager name="applicationKM" key-store="applicationKS" generate-self-signed-certificate-host="localhost">
+            <key-manager name="applicationKM" key-store="applicationKS" generate-self-signed-certificate-host="localhost" alias-filter="tomcat">
                 <credential-reference clear-text="changeit"/>
             </key-manager>
         </key-managers>
@@ -381,7 +379,13 @@ for (element in securitySubsystem) {
     }
 }
 
-//tls.key-stores.key-store[0].credential-reference.'@clear-text'== "changeit"
+tls.'key-stores'.'key-store'[0].'credential-reference'.@'clear-text' = "changeit"
+tls.'key-stores'.'key-store'[0].file.@path = keystorePath
+tls.'key-stores'.'key-store'[0].file[0].attributes().remove('relative-to')
+
+tls.'key-managers'.'key-manager'[0].'credential-reference'.@'clear-text' = "changeit"
+tls.'key-managers'.'key-manager'[0].@'alias-filter' = "tomcat"
+
 
 
 /*

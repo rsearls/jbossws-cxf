@@ -49,12 +49,7 @@ def realm = securityDomain.appendNode('realm',['name':'JBossWS','role-decoder':'
  *        <groups-properties path="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/jbossws-roles.properties"/>
  *     </properties-realm>
 */
-def securityRealms = null
-for (element in securitySubsystem) {
-    if (element.name().getLocalPart() == 'security-realms') {
-        securityRealms = element
-    }
-}
+def securityRealms = root.profile.subsystem.'security-realms'[0]
 def propertiesRealm = securityRealms.appendNode('properties-realm', ['name':'JBossWS'])
 def usersProperties = propertiesRealm.appendNode('users-properties',['path':usersPropFile, 'plain-text':'true'])
 def groupsProperties = propertiesRealm.appendNode('groups-properties',['path':rolesPropFile])
@@ -83,7 +78,11 @@ def mechanismRealm=mechanism.appendNode('mechanism-realm',['realm-name':'JBossWS
 //add to undertow
 def undertowSubsystem = getSubsystem(root, "urn:jboss:domain:undertow:")
 
-def undertowAppSecurityDomains = undertowSubsystem.'application-security-domains'[0]
+//TODO: is there better create node as sibling in groovy
+def undertowChildren = undertowSubsystem.children()
+def undertowAppSecurityDomains = new groovy.util.Node(null, 'application-security-domains', [])
+undertowChildren.add(undertowAppSecurityDomains)
+
 def appSecurityDomain = undertowAppSecurityDomains.appendNode('application-security-domain', ['name':'JBossWS','http-authentication-factory':'JBossWS'])
 
 /**
