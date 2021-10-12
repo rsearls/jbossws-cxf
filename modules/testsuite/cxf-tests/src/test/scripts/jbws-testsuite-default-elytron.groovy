@@ -61,6 +61,9 @@ def jaasJBossWSRealm = legacyDomain.appendNode('realm',['name':'JAASJBossWSRealm
 def legacyDigestDomain = securityDomains.appendNode('security-domain', ['name':'JBossWSDigest','default-realm':'JAASJBossWSDigestRealm','permission-mapper':'default-permission-mapper'])
 def jaasJBossWDigestRealm = legacyDigestDomain.appendNode('realm',['name':'JAASJBossWSDigestRealm'])
 
+def testSecurityDomain = securityDomains.appendNode('security-domain',
+        ['name':'jbws-test-https-realm','default-realm':'jbws-test-https-realm','permission-mapper':'default-permission-mapper'])
+def testRealm = testSecurityDomain.appendNode('realm',['name':'jbws-test-https-realm','role-decoder':'groups-to-roles'])
 
 
 /**
@@ -93,7 +96,9 @@ def digestRealm = securityRealms.appendNode('properties-realm', ['name':'ws-dige
 def digestUserProperties = digestRealm.appendNode('users-properties',['path': testResourcesDir + '/jaxws/cxf/httpauth/WEB-INF/ws-digest-users.properties'])
 def digestGroupsProperties = digestRealm.appendNode('groups-properties',['path': testResourcesDir + '/jaxws/cxf/httpauth/WEB-INF/ws-roles.properties'])
 
-
+def testPropertiesRealm = securityRealms.appendNode('properties-realm', ['name':'jbws-test-https-realm'])
+def tesUsersProperties = testPropertiesRealm.appendNode('users-properties',['path':usersPropFile, 'plain-text':'true'])
+def testGroupsProperties = testPropertiesRealm.appendNode('groups-properties',['path':rolesPropFile])
 
 
 /**
@@ -140,7 +145,11 @@ def digestMechanismConfiguration = digestHttpAuthenticationFactory.appendNode('m
 def digestMechanism = digestMechanismConfiguration.appendNode('mechanism',['mechanism-name':'DIGEST'])
 def digestMechanismRealm = digestMechanism.appendNode('mechanism-realm',['realm-name':'ws-digest-domain'])
 
-
+def testHttpAuthenticationFactory = httpAuthen.appendNode('http-authentication-factory',
+        ['name':'jbws-test-https-realm','http-server-mechanism-factory':'global', 'security-domain':'jbws-test-https-realm'])
+def testMechanismConfiguration = testHttpAuthenticationFactory.appendNode('mechanism-configuration')
+def testMechanism = testMechanismConfiguration.appendNode('mechanism',['mechanism-name':'BASIC'])
+def testMechanismRealm=testMechanism.appendNode('mechanism-realm',['realm-name':'jbws-test-https-realm'])
 
 
 /**
@@ -162,6 +171,7 @@ def ejbSecurityDomain1 = appSecurityDomains.appendNode('application-security-dom
 def ejbSecurityDomain2 = appSecurityDomains.appendNode('application-security-domain', ['name':'JAASJBossWS','security-domain':'JAASJBossWS'])
 def ejbSecurityDomain3 = appSecurityDomains.appendNode('application-security-domain', ['name':'ws-basic-domain','security-domain':'ws-basic-domain'])
 def ejbSecurityDomain4 = appSecurityDomains.appendNode('application-security-domain', ['name':'JBossWSDigest','security-domain':'JBossWSDigest'])
+def ejbSecurityDomain5 = appSecurityDomains.appendNode('application-security-domain', ['name':'jbws-test-https-realm','security-domain':'jbws-test-https-realm'])
 
 //add to undertow
 def undertowSubsystem = getSubsystem(root, "urn:jboss:domain:undertow:")
@@ -355,12 +365,31 @@ elytronRealms.appendNode('elytron-realm', ['name':'JAASJBossWSDigestRealm','lega
  * </security-realm>
  *
  */
-
+/**
 def rootsecurityRealms = root.management.'security-realms'[0]
 def rootsecurityRealm = rootsecurityRealms.appendNode('security-realm', ['name':'jbws-test-https-realm'])
 def serverIdentities = rootsecurityRealm.appendNode('server-identities')
 def ssl = serverIdentities.appendNode('ssl')
 ssl.appendNode('keystore', ['path':keystorePath,'keystore-password':'changeit','alias':'tomcat'])
+**/
+
+def tls = securitySubsystem.appendNode('tls')
+
+def keyStores = tls.appendNode('key-stores')
+def keyStore = keyStores.appendNode('key-store', ['name':'twoWayKS'])
+def credentialReference = keyStore.appendNode('credential-reference',['clear-text':'changeit'])
+def implementation = keyStore.appendNode('implementation',['type':'JKS'])
+def filePath = keyStore.appendNode('file',['path':keystorePath])
+
+def keyManagers = tls.appendNode('key-managers')
+def keyManager = keyManagers.appendNode('key-manager', ['name':'twoWayKM','key-store':'twoWayKS'])
+def credentialReferenceKM = keyManager.appendNode('credential-reference',['clear-text':'changeit'])
+
+def serverSslContexts = tls.appendNode('server-ssl-contexts')
+def serverSslContext = serverSslContexts.appendNode('server-ssl-context',
+        ['name':'twoWaySSC','protocols':'TL`Sv1.2','need-client-auth':'true',
+         'key-manager':'twoWayKM'])
+
 
 def server = root.profile.subsystem.server[0]
 def curHttpsListener = server.'https-listener'[0]

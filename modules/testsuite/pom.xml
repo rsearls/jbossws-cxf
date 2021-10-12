@@ -44,8 +44,10 @@
   <!-- Modules -->
   <modules>
     <module>cxf-tests</module>
+    <!-- rls
     <module>shared-tests</module>
     <module>perf-tests</module>
+    -->
   </modules>
 
   <!-- Dependencies -->
