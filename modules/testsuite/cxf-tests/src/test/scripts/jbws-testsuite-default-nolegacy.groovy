@@ -4,259 +4,237 @@ def root = new XmlParser().parse(inputFile)
  * Fix logging: optionally remove CONSOLE handler and set a specific log file
  *
  */
-
 def logHandlers = root.profile.subsystem.'root-logger'.handlers[0]
 def consoleHandler = logHandlers.find{it.@name == 'CONSOLE'}
 if (!session.userProperties['enableServerLoggingToConsole'] && !project.properties['enableServerLoggingToConsole']) logHandlers.remove(consoleHandler)
 def file = root.profile.subsystem.'periodic-rotating-file-handler'.file[0]
 file.attributes()['path'] = serverLog
 
-// rls debug start
-def loggingSubsystem =  getSubsystem(root, "urn:jboss:domain:logging:")
-def logger1 = new groovy.util.Node(null, 'logger', ['category' : 'org.wildfly'])
-loggingSubsystem.append(logger1)
-def level1 = new groovy.util.Node(null, 'level', ['name' : 'DEBUG'])
-logger1.append(level1)
-// rls debug end
-
 /**
- * Helper method to get subsystem element by xmlns prefix
+ * Add a security-domain block like this:
+ *
+ * <security-domain name="JAASJBossWS" cache-type="default">
+ *   <authentication>
+ *     <login-module code="UsersRoles" flag="required">
+ *       <module-option name="usersProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/jbossws-users.properties"/>
+ *       <module-option name="unauthenticatedIdentity" value="anonymous"/>
+ *       <module-option name="rolesProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/jbossws-roles.properties"/>
+ *     </login-module>
+ *   </authentication>
+ * </security-domain>
+ *
  */
-private getSubsystem(root, xmlnsPrefix) {
-  for (item in root.profile.subsystem) {
-    if (item.name().getNamespaceURI().startsWith(xmlnsPrefix)) {
-      return item;
+
+def subsystems = root.profile.subsystem
+def securityDomains = null
+for (item in subsystems) {
+    if (item.name().getNamespaceURI().contains("urn:jboss:domain:security:")) {
+       for (element in item) {
+           if (element.name().getLocalPart() == 'security-domains') {
+              securityDomains = element
+           }
+       }
+       break
     }
-  }
 }
+def securityDomain = securityDomains.appendNode('security-domain', ['name':'JAASJBossWS','cache-type':'default'])
+def authentication = securityDomain.appendNode('authentication')
+def loginModule = authentication.appendNode('login-module', ['code':'UsersRoles','flag':'required'])
+loginModule.appendNode('module-option', ['name':'unauthenticatedIdentity','value':'anonymous'])
+loginModule.appendNode('module-option', ['name':'usersProperties','value':usersPropFile])
+loginModule.appendNode('module-option', ['name':'rolesProperties','value':rolesPropFile])
+
 
 /**
  * Add a security-domain block like this:
  *
- *        <subsystem xmlns="urn:wildfly:elytron:1.0">
- *           <security-domains>
- *                <security-domain name="JBossWS" default-realm="JBossWS" permission-mapper="login-permission-mapper" role-mapper="combined-role-mapper">
- *                   <realm name="JBossWS" role-decoder="groups-to-roles"/>
- *               </security-domain>
- *               <security-domain name="ws-basic-domain" default-realm="ws-basic-domain" permission-mapper="login-permission-mapper" role-mapper="combined-role-mapper">
- *                   <realm name="ws-basic-domain" role-decoder="groups-to-roles"/>
- *               </security-domain>
- *           </security-domains>
- * 
+ * <security-domain name="JBossWS" cache-type="default">
+ *   <authentication>
+ *     <login-module code="UsersRoles" flag="required">
+ *       <module-option name="usersProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/jbossws-users.properties"/>
+ *       <module-option name="unauthenticatedIdentity" value="anonymous"/>
+ *       <module-option name="rolesProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/jbossws-roles.properties"/>
+ *     </login-module>
+ *   </authentication>
+ * </security-domain>
  *
  */
-def securitySubsystem =  getSubsystem(root, "urn:wildfly:elytron:")
-def securityDomains = null
-for (element in securitySubsystem) {
-  if (element.name().getLocalPart() == 'security-domains') {
-    securityDomains = element
-  }
-}
-def securityDomain = securityDomains.appendNode('security-domain', ['name':'JBossWS','default-realm':'JBossWS','permission-mapper':'default-permission-mapper'])
-def realm = securityDomain.appendNode('realm',['name':'JBossWS','role-decoder':'groups-to-roles'])
 
-def basicsecurityDomain = securityDomains.appendNode('security-domain', ['name':'ws-basic-domain','default-realm':'ws-basic-domain','permission-mapper':'default-permission-mapper'])
-def basicrealm = basicsecurityDomain.appendNode('realm',['name':'ws-basic-domain','role-decoder':'groups-to-roles'])
-
-
-def digestDomain = securityDomains.appendNode('security-domain', ['name':'ws-digest-domain','default-realm':'ws-digest-domain','permission-mapper':'default-permission-mapper'])
-def digestRefRealm = digestDomain.appendNode('realm',['name':'ws-digest-domain','role-decoder':'groups-to-roles'])
-
-
-def legacyDomain = securityDomains.appendNode('security-domain', ['name':'JAASJBossWS','default-realm':'JAASJBossWS','permission-mapper':'default-permission-mapper'])
-def jaasJBossWSRealm = legacyDomain.appendNode('realm',['name':'JAASJBossWS'])
-
-def legacyDigestDomain = securityDomains.appendNode('security-domain', ['name':'JBossWSDigest','default-realm':'JAASJBossWSDigestRealm','permission-mapper':'default-permission-mapper'])
-def jaasJBossWDigestRealm = legacyDigestDomain.appendNode('realm',['name':'JAASJBossWSDigestRealm'])
-
-def testSecurityDomain = securityDomains.appendNode('security-domain',
-        ['name':'jbws-test-https-realm','default-realm':'jbws-test-https-realm','permission-mapper':'default-permission-mapper'])
-def testRealm = testSecurityDomain.appendNode('realm',['name':'jbws-test-https-realm','role-decoder':'groups-to-roles'])
-
-def jaspiDomain = securityDomains.appendNode('security-domain', ['name':'jaspi','default-realm':'jaspi','permission-mapper':'default-permission-mapper'])
-def jaspiRealm = jaspiDomain.appendNode('realm',['name':'jaspi'])
-
-def clientJaspiDomain = securityDomains.appendNode('security-domain', ['name':'clientJaspi','default-realm':'clientJaspi','permission-mapper':'default-permission-mapper'])
-def clientJaspiRealm = clientJaspiDomain.appendNode('realm',['name':'clientJaspi'])
-
+def jbsecurityDomain = securityDomains.appendNode('security-domain', ['name':'JBossWS','cache-type':'default'])
+def jbauthentication = jbsecurityDomain.appendNode('authentication')
+def jbloginModule = jbauthentication.appendNode('login-module', ['code':'UsersRoles','flag':'required'])
+jbloginModule.appendNode('module-option', ['name':'unauthenticatedIdentity','value':'anonymous'])
+jbloginModule.appendNode('module-option', ['name':'usersProperties','value':usersPropFile])
+jbloginModule.appendNode('module-option', ['name':'rolesProperties','value':rolesPropFile])
 
 /**
- *            <security-realms>
- *               <properties-realm name="JBossWS">
- *                   <users-properties path="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/jbossws-users.properties"/>
- *                   <groups-properties path="application-roles.properties" relative-to="jboss.server.config.dir"/>
- *               </properties-realm>
- *               <properties-realm name="ws-basic-domain">
- *                   <users-properties path="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/ws-users.properties"/>
- *                   <groups-properties path="application-roles.properties"/>
- *               </properties-realm>
- *            </security-realms>
+ * Add a security-domain block like this:
  *
+ * <security-domain name="JBossWS-trust-sts" cache-type="default">
+ *   <authentication>
+ *     <login-module code="UsersRoles" flag="required">
+ *       <module-option name="usersProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-resources/jaxws/samples/wsse/policy/trust/WEB-INF/jbossws-users.properties"/>
+ *       <module-option name="unauthenticatedIdentity" value="anonymous"/>
+ *       <module-option name="rolesProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-resources/jaxws/samples/wsse/policy/trust/WEB-INF/jbossws-roles.properties"/>
+ *     </login-module>
+ *   </authentication>
+ * </security-domain>
  *
  */
-def securityRealms = root.profile.subsystem.'security-realms'[0]
 
-def propertiesRealm = securityRealms.appendNode('properties-realm', ['name':'JBossWS'])
-def usersProperties = propertiesRealm.appendNode('users-properties',['path':usersPropFile, 'plain-text':'true'])
-def groupsProperties = propertiesRealm.appendNode('groups-properties',['path':rolesPropFile])
-
-
-def basicPropertiesRealm = securityRealms.appendNode('properties-realm', ['name':'ws-basic-domain'])
-def basicUsersProperties = basicPropertiesRealm.appendNode('users-properties',['path': testResourcesDir + '/jaxws/cxf/httpauth/WEB-INF/ws-users.properties', 'plain-text':'true'])
-def basicGroupsProperties = basicPropertiesRealm.appendNode('groups-properties',['path': testResourcesDir + '/jaxws/cxf/httpauth/WEB-INF/ws-roles.properties'])
-
-def digestRealm = securityRealms.appendNode('properties-realm', ['name':'ws-digest-domain'])
-def digestUserProperties = digestRealm.appendNode('users-properties',['path': testResourcesDir + '/jaxws/cxf/httpauth/WEB-INF/ws-digest-users.properties'])
-def digestGroupsProperties = digestRealm.appendNode('groups-properties',['path': testResourcesDir + '/jaxws/cxf/httpauth/WEB-INF/ws-roles.properties'])
-
-def testPropertiesRealm = securityRealms.appendNode('properties-realm', ['name':'jbws-test-https-realm'])
-def tesUsersProperties = testPropertiesRealm.appendNode('users-properties',['path':usersPropFile, 'plain-text':'true'])
-def testGroupsProperties = testPropertiesRealm.appendNode('groups-properties',['path':rolesPropFile])
-
-def JAASJBossWSPropertiesRealm = securityRealms.appendNode('properties-realm', ['name':'JAASJBossWS'])
-def JAASJBossWSUsersProperties = JAASJBossWSPropertiesRealm.appendNode('users-properties',['path':usersPropFile, 'plain-text':'true'])
-def JAASJBossWSGroupsProperties = JAASJBossWSPropertiesRealm.appendNode('groups-properties',['path':rolesPropFile])
-
-def trustStsPropertiesRealm = securityRealms.appendNode('properties-realm', ['name':'JBossWS-trust-sts'])
-def trustStsUsersProperties = trustStsPropertiesRealm.appendNode('users-properties',['path':testResourcesDir + '/jaxws/samples/wsse/policy/trust/WEB-INF/jbossws-users.properties', 'plain-text':'true'])
-def trustStsGroupsProperties = trustStsPropertiesRealm.appendNode('groups-properties',['path':testResourcesDir + '/jaxws/samples/wsse/policy/trust/WEB-INF/jbossws-roles.properties'])
-
-def JBossWSDigestPropertiesRealm = securityRealms.appendNode('properties-realm', ['name':'JAASJBossWSDigestRealm'])
-def JBossWSDigestUsersProperties = JBossWSDigestPropertiesRealm.appendNode('users-properties',['path':testResourcesDir + '/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-users.properties', 'plain-text':'true'])
-def JBossWSDigestGroupsProperties = JBossWSDigestPropertiesRealm.appendNode('groups-properties',['path':testResourcesDir + '/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-roles.properties'])
-
-def jaspiPropertiesRealm = securityRealms.appendNode('properties-realm', ['name':'jaspi'])
-def jaspiUsersProperties = jaspiPropertiesRealm.appendNode('users-properties',['path':usersPropFile, 'plain-text':'true'])
-def jaspiGroupsProperties = jaspiPropertiesRealm.appendNode('groups-properties',['path':rolesPropFile])
-
-def clientJaspiPropertiesRealm = securityRealms.appendNode('properties-realm', ['name':'clientJaspi'])
-def clientJaspiUsersProperties = clientJaspiPropertiesRealm.appendNode('users-properties',['path':usersPropFile, 'plain-text':'true'])
-def clientJaspiGroupsProperties = clientJaspiPropertiesRealm.appendNode('groups-properties',['path':rolesPropFile])
+def securityDomainSts = securityDomains.appendNode('security-domain', ['name':'JBossWS-trust-sts','cache-type':'default'])
+def authenticationSts = securityDomainSts.appendNode('authentication')
+def loginModuleSts = authenticationSts.appendNode('login-module', ['code':'UsersRoles','flag':'required'])
+loginModuleSts.appendNode('module-option', ['name':'unauthenticatedIdentity','value':'anonymous'])
+loginModuleSts.appendNode('module-option', ['name':'usersProperties','value':testResourcesDir + '/jaxws/samples/wsse/policy/trust/WEB-INF/jbossws-users.properties'])
+loginModuleSts.appendNode('module-option', ['name':'rolesProperties','value':testResourcesDir + '/jaxws/samples/wsse/policy/trust/WEB-INF/jbossws-roles.properties'])
 
 /**
- *             <http>
- *               <http-authentication-factory name="JBossWS" http-server-mechanism-factory="global" security-domain="JBossWS">
- *                   <mechanism-configuration>
- *                       <mechanism mechanism-name="BASIC">
- *                           <mechanism-realm realm-name="JBossWS Realm"/>
- *                       </mechanism>
- *                   </mechanism-configuration>
- *               </http-authentication-factory>
- *               <http-authentication-factory name="ws-basic-domain" http-server-mechanism-factory="global" security-domain="ws-basic-domain">
- *                   <mechanism-configuration>
- *                       <mechanism mechanism-name="BASIC">
- *                           <mechanism-realm realm-name="ws-basic-domain"/>
- *                       </mechanism>
- *                   </mechanism-configuration>
- *               </http-authentication-factory>
+ * Add a security-domain block like this:
  *
+ * <security-domain name="ws-basic-domain" cache-type="default">
+ *   <authentication>
+ *     <login-module code="UsersRoles" flag="required">
+ *       <module-option name="usersProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-resources/jaxws/cxf/httpauth/WEB-INF/ws-users.properties"/>
+ *       <module-option name="rolesProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-resources/jaxws/cxf/httpauth/WEB-INF/ws-roles.properties"/>
+ *       <module-option name="password-stacking" value="useFirstPass"/>
+ *     </login-module>
+ *   </authentication>
+ * </security-domain>
  *
  */
-def httpAuthen = null
-for (element in securitySubsystem) {
-    if (element.name().getLocalPart() == 'http') {
-       httpAuthen = element
-       break
-    }
-}
-def httpAuthenticationFactory = httpAuthen.appendNode('http-authentication-factory', ['name':'JBossWS','http-server-mechanism-factory':'global', 'security-domain':'JBossWS'])
-def mechanismConfiguration = httpAuthenticationFactory.appendNode('mechanism-configuration')
-def mechanism = mechanismConfiguration.appendNode('mechanism',['mechanism-name':'BASIC'])
-def mechanismRealm=mechanism.appendNode('mechanism-realm',['realm-name':'JBossWS'])
 
-def basicHttpAuthenticationFactory = httpAuthen.appendNode('http-authentication-factory', ['name':'ws-basic-domain','http-server-mechanism-factory':'global', 'security-domain':'ws-basic-domain'])
-def basicMechanismConfiguration = basicHttpAuthenticationFactory.appendNode('mechanism-configuration')
-def basicMechanism = basicMechanismConfiguration.appendNode('mechanism',['mechanism-name':'BASIC'])
-def basicmechanismRealm = basicMechanism.appendNode('mechanism-realm',['realm-name':'ws-basic-domain'])
-
-def digestHttpAuthenticationFactory = httpAuthen.appendNode('http-authentication-factory', ['name':'ws-digest-domain','http-server-mechanism-factory':'global', 'security-domain':'ws-digest-domain'])
-def digestMechanismConfiguration = digestHttpAuthenticationFactory.appendNode('mechanism-configuration')
-def digestMechanism = digestMechanismConfiguration.appendNode('mechanism',['mechanism-name':'DIGEST'])
-def digestMechanismRealm = digestMechanism.appendNode('mechanism-realm',['realm-name':'ws-digest-domain'])
-
-def testHttpAuthenticationFactory = httpAuthen.appendNode('http-authentication-factory',
-        ['name':'jbws-test-https-realm','http-server-mechanism-factory':'global', 'security-domain':'jbws-test-https-realm'])
-def testMechanismConfiguration = testHttpAuthenticationFactory.appendNode('mechanism-configuration')
-def testMechanism = testMechanismConfiguration.appendNode('mechanism',['mechanism-name':'BASIC'])
-def testMechanismRealm=testMechanism.appendNode('mechanism-realm',['realm-name':'jbws-test-https-realm'])
-
-def jaspiAuthen = null
-for (element in securitySubsystem) {
-    if (element.name().getLocalPart() == 'jaspi') {
-        jaspiAuthen = element
-        break
-    }
-}
-
-if (jaspiAuthen == null) {
-    jaspiAuthen = new groovy.util.Node(null, 'jaspi', [])
-    securitySubsystem.append(jaspiAuthen)
-}
-def jaspiConfiguration1 = new groovy.util.Node(null, 'jaspi-configuration', ['name' : 'jaspi-jaas-lm-stack'])
-jaspiAuthen.append(jaspiConfiguration1)
-def serverAuthModules1 = new groovy.util.Node(null, 'server-auth-modules', [])
-jaspiConfiguration1.append(serverAuthModules1)
-def servAuthModule1 = new groovy.util.Node(null, 'server-auth-module',
-        ['class-name' : 'org.jboss.wsf.stack.cxf.jaspi.module.UsernameTokenServerAuthModule', 'module' : 'org.jboss.ws.jaxws-client'])
-serverAuthModules1.append(servAuthModule1)
-
-def jaspiConfiguration2 = new groovy.util.Node(null, 'jaspi-configuration', ['name' : 'clientJaspi-jaas-lm-stack'])
-jaspiAuthen.append(jaspiConfiguration2)
-def serverAuthModules2 = new groovy.util.Node(null, 'server-auth-modules', [])
-jaspiConfiguration2.append(serverAuthModules2)
-def servAuthModule2 = new groovy.util.Node(null, 'server-auth-module',
-        ['class-name' : 'org.jboss.wsf.stack.cxf.jaspi.client.module.SOAPClientAuthModule', 'module' : 'org.jboss.ws.jaxws-client'])
-serverAuthModules2.append(servAuthModule2)
+def securityDomainBasicAuth = securityDomains.appendNode('security-domain', ['name':'ws-basic-domain','cache-type':'default'])
+def authenticationBasicAuth = securityDomainBasicAuth.appendNode('authentication')
+def loginModuleBasicAuth = authenticationBasicAuth.appendNode('login-module', ['code':'UsersRoles','flag':'required'])
+loginModuleBasicAuth.appendNode('module-option', ['name':'usersProperties','value':testResourcesDir + '/jaxws/cxf/httpauth/WEB-INF/ws-users.properties'])
+loginModuleBasicAuth.appendNode('module-option', ['name':'rolesProperties','value':testResourcesDir + '/jaxws/cxf/httpauth/WEB-INF/ws-roles.properties'])
+loginModuleBasicAuth.appendNode('module-option', ['name':'password-stacking','value':'useFirstPass'])
 
 /**
+ * Add a security-domain block like this:
+ *
+ * <security-domain name="ws-digest-domain" cache-type="default">
+ *   <authentication>
+ *     <login-module code="UsersRoles" flag="required">
+ *       <module-option name="hashUserPassword" value="false"/>
+ *       <module-option name="usersProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-resources/jaxws/cxf/httpauth/WEB-INF/ws-users.properties"/>
+ *       <module-option name="hashAlgorithm" value="MD5"/>
+ *       <module-option name="hashEncoding" value="RFC2617"/>
+ *       <module-option name="rolesProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-resources/jaxws/cxf/httpauth/WEB-INF/ws-roles.properties"/>
+ *       <module-option name="storeDigestCallback" value="org.jboss.security.auth.callback.RFC2617Digest"/>
+ *       <module-option name="hashStorePassword" value="true"/>
+ *     </login-module>
+ *   </authentication>
+ * </security-domain>
+ *
  */
 
-def ejbSubsystem = getSubsystem(root, "urn:jboss:domain:ejb3:")
-def appSecurityDomains = null
-for (element in ejbSubsystem) {
-    if (element.name().getLocalPart() == 'application-security-domains') {
-        appSecurityDomains = element
-    }
-}
+def securityDomainDigestAuth = securityDomains.appendNode('security-domain', ['name':'ws-digest-domain','cache-type':'default'])
+def authenticationDigestAuth = securityDomainDigestAuth.appendNode('authentication')
+def loginModuleDigestAuth = authenticationDigestAuth.appendNode('login-module', ['code':'UsersRoles','flag':'required'])
+loginModuleDigestAuth.appendNode('module-option', ['name':'hashUserPassword','value':'false'])
+loginModuleDigestAuth.appendNode('module-option', ['name':'usersProperties','value':testResourcesDir + '/jaxws/cxf/httpauth/WEB-INF/ws-users.properties'])
+loginModuleDigestAuth.appendNode('module-option', ['name':'hashAlgorithm','value':'MD5'])
+loginModuleDigestAuth.appendNode('module-option', ['name':'hashEncoding','value':'RFC2617'])
+loginModuleDigestAuth.appendNode('module-option', ['name':'rolesProperties','value':testResourcesDir + '/jaxws/cxf/httpauth/WEB-INF/ws-roles.properties'])
+loginModuleDigestAuth.appendNode('module-option', ['name':'storeDigestCallback','value':'org.jboss.security.auth.callback.RFC2617Digest'])
+loginModuleDigestAuth.appendNode('module-option', ['name':'hashStorePassword','value':'true'])
 
-def ejbSecurityDomain1 = appSecurityDomains.appendNode('application-security-domain', ['name':'JBossWS','security-domain':'JBossWS'])
-def ejbSecurityDomain2 = appSecurityDomains.appendNode('application-security-domain', ['name':'JAASJBossWS','security-domain':'JAASJBossWS'])
-def ejbSecurityDomain3 = appSecurityDomains.appendNode('application-security-domain', ['name':'ws-basic-domain','security-domain':'ws-basic-domain'])
-def ejbSecurityDomain4 = appSecurityDomains.appendNode('application-security-domain', ['name':'JBossWSDigest','security-domain':'JBossWSDigest'])
-def ejbSecurityDomain5 = appSecurityDomains.appendNode('application-security-domain', ['name':'jbws-test-https-realm','security-domain':'jbws-test-https-realm'])
+/**
+ * Add a security-domain block like this:
+ *
+ * <security-domain name="JBossWSDigest" cache-type="default">
+ *   <authentication>
+ *     <login-module code="UsersRoles" flag="required">
+ *       <module-option name="hashUserPassword" value="false"/>
+ *       <module-option name="hashCharset" value="UTF-8"/>
+ *       <module-option name="usersProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-users.properties"/>
+ *       <module-option name="hashAlgorithm" value="SHA"/>
+ *       <module-option name="unauthenticatedIdentity" value="anonymous"/>
+ *       <module-option name="hashEncoding" value="BASE64"/>
+ *       <module-option name="rolesProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-roles.properties"/>
+ *       <module-option name="storeDigestCallback" value="org.jboss.wsf.stack.cxf.security.authentication.callback.UsernameTokenCallback"/>
+ *       <module-option name="hashStorePassword" value="true"/>
+ *     </login-module>
+ *   </authentication>
+ * </security-domain>
+ *
+ */
 
-//add to undertow
-def undertowSubsystem = getSubsystem(root, "urn:jboss:domain:undertow:")
-def undertowAppSecurityDomains = null
-for (element in undertowSubsystem) {
-    if (element.name().getLocalPart() == 'application-security-domains') {
-        undertowAppSecurityDomains = element
-    }
-}
-def appSecurityDomain = undertowAppSecurityDomains.appendNode('application-security-domain', ['name':'JBossWS','http-authentication-factory':'JBossWS'])
-def basicAppSecurityDomain = undertowAppSecurityDomains.appendNode('application-security-domain', ['name':'ws-basic-domain','http-authentication-factory':'ws-basic-domain'])
-def digestAppSecurityDomain = undertowAppSecurityDomains.appendNode('application-security-domain', ['name':'ws-digest-domain','http-authentication-factory':'ws-digest-domain'])
-def jaspiAppSecurityDomain = undertowAppSecurityDomains.appendNode('application-security-domain', ['name':'jaspi','security-domain':'jaspi'])
-def clientJaspiAppSecurityDomain = undertowAppSecurityDomains.appendNode('application-security-domain', ['name':'clientJaspi','security-domain':'clientJaspi'])
+def securityDomainDigest = securityDomains.appendNode('security-domain', ['name':'JBossWSDigest','cache-type':'default'])
+def authenticationDigest = securityDomainDigest.appendNode('authentication')
+def loginModuleDigest = authenticationDigest.appendNode('login-module', ['code':'UsersRoles','flag':'required'])
+loginModuleDigest.appendNode('module-option', ['name':'hashUserPassword','value':'false'])
+loginModuleDigest.appendNode('module-option', ['name':'hashCharset','value':'UTF-8'])
+loginModuleDigest.appendNode('module-option', ['name':'hashAlgorithm','value':'SHA'])
+loginModuleDigest.appendNode('module-option', ['name':'hashEncoding','value':'BASE64'])
+loginModuleDigest.appendNode('module-option', ['name':'storeDigestCallback','value':'org.jboss.wsf.stack.cxf.security.authentication.callback.UsernameTokenCallback'])
+loginModuleDigest.appendNode('module-option', ['name':'hashStorePassword','value':'true'])
+loginModuleDigest.appendNode('module-option', ['name':'unauthenticatedIdentity','value':'anonymous'])
+loginModuleDigest.appendNode('module-option', ['name':'usersProperties','value':testResourcesDir + '/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-users.properties'])
+loginModuleDigest.appendNode('module-option', ['name':'rolesProperties','value':testResourcesDir + '/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-roles.properties'])
 
+/**
+ * Add two security-domain blocks for JASPI tests as below:
+ *
+ * <security-domain name="jaspi">
+ *   <authentication-jaspi>
+ *     <login-module-stack name="jaas-lm-stack">
+ *       <login-module code="UsersRoles" flag="required">
+ *         <module-option name="usersProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/jbossws-users.properties"/>
+ *         <module-option name="rolesProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/jbossws-roles.properties"/>
+ *       </login-module>
+ *     </login-module-stack>
+ *     <auth-module code="org.jboss.wsf.stack.cxf.jaspi.module.UsernameTokenServerAuthModule" login-module-stack-ref="jaas-lm-stack"/>
+ *   </authentication-jaspi>
+ * </security-domain>
+ * <security-domain name="clientJaspi">
+ *   <authentication-jaspi>
+ *     <login-module-stack name="jaas-lm-stack">
+ *       <login-module code="UsersRoles" flag="required">
+ *         <module-option name="usersProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/jbossws-users.properties"/>
+ *         <module-option name="rolesProperties" value="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/jbossws-roles.properties"/>
+ *       </login-module>
+ *     </login-module-stack>
+ *   <auth-module code="org.jboss.wsf.stack.cxf.jaspi.client.module.SOAPClientAuthModule" login-module-stack-ref="jaas-lm-stack"/>
+ * </authentication-jaspi>
+ */
+ 
+def securityDomainJaspi = securityDomains.appendNode('security-domain', ['name':'jaspi'])
+def authenticationJaspi = securityDomainJaspi.appendNode('authentication-jaspi')
+def loginModuleStack = authenticationJaspi.appendNode('login-module-stack', ['name':'jaas-lm-stack'])
+def loginModuleJaspi = loginModuleStack.appendNode('login-module', ['code':'UsersRoles','flag':'required'])
+loginModuleJaspi.appendNode('module-option', ['name':'usersProperties','value':usersPropFile])
+loginModuleJaspi.appendNode('module-option', ['name':'rolesProperties','value':rolesPropFile])
+authenticationJaspi.appendNode('auth-module', ['code':'org.jboss.wsf.stack.cxf.jaspi.module.UsernameTokenServerAuthModule','login-module-stack-ref':'jaas-lm-stack'])
 
-def tls = securitySubsystem.appendNode('tls')
+def securityDomainJaspiClient = securityDomains.appendNode('security-domain', ['name':'clientJaspi'])
+def authenticationJaspiClient = securityDomainJaspiClient.appendNode('authentication-jaspi')
+def loginModuleStackClient = authenticationJaspiClient.appendNode('login-module-stack', ['name':'jaas-lm-stack'])
+def loginModuleJaspiClient = loginModuleStackClient.appendNode('login-module', ['code':'UsersRoles','flag':'required'])
+loginModuleJaspiClient.appendNode('module-option', ['name':'usersProperties','value':usersPropFile])
+loginModuleJaspiClient.appendNode('module-option', ['name':'rolesProperties','value':rolesPropFile])
+authenticationJaspiClient.appendNode('auth-module', ['code':'org.jboss.wsf.stack.cxf.jaspi.client.module.SOAPClientAuthModule','login-module-stack-ref':'jaas-lm-stack'])
 
-def keyStores = tls.appendNode('key-stores')
-def keyStore = keyStores.appendNode('key-store', ['name':'twoWayKS'])
-def credentialReference = keyStore.appendNode('credential-reference',['clear-text':'changeit'])
-def implementation = keyStore.appendNode('implementation',['type':'JKS'])
-def filePath = keyStore.appendNode('file',['path':keystorePath])
+/**
+ * Add a https connector like this:
+ *
+ * <security-realm name="jbws-test-https-realm">
+ *    <server-identities>
+ *        <ssl>
+ *             <keystore path="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/test.keystore" keystore-password="changeit" alias="tomcat"/>
+ *        </ssl>
+ *    </server-identities>
+ * </security-realm>
+ *
+ */
 
-def keyManagers = tls.appendNode('key-managers')
-def keyManager = keyManagers.appendNode('key-manager', ['name':'twoWayKM','key-store':'twoWayKS'])
-def credentialReferenceKM = keyManager.appendNode('credential-reference',['clear-text':'changeit'])
-
-def serverSslContexts = tls.appendNode('server-ssl-contexts')
-def serverSslContext = serverSslContexts.appendNode('server-ssl-context',
-        ['name':'twoWaySSC','protocols':'TLSv1.2','need-client-auth':'true',
-         'key-manager':'twoWayKM'])
-
+def securityRealms = root.management.'security-realms'[0]
+def securityRealm = securityRealms.appendNode('security-realm', ['name':'jbws-test-https-realm'])
+def serverIdentities = securityRealm.appendNode('server-identities')
+def ssl = serverIdentities.appendNode('ssl')
+ssl.appendNode('keystore', ['path':keystorePath,'keystore-password':'changeit','alias':'tomcat'])
 
 def server = root.profile.subsystem.server[0]
 def curHttpsListener = server.'https-listener'[0]
@@ -271,7 +249,6 @@ server.appendNode('https-listener', ['name':'jbws-test-https-listener','socket-b
 root.children().add(1, new Node(null, 'system-properties', null)) //add system-properties node after the extensions
 def systemProperties = root.'system-properties'[0]
 systemProperties.appendNode('property', ['name':'org.jboss.wsf.test.JBWS3628TestCase.policy','value':'WS-Addressing_policy'])
-
 
 /**
  * Save the configuration to a new file
