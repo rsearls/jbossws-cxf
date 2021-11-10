@@ -52,10 +52,9 @@ private getSubsystem(root, xmlnsPrefix) {
  */
 
 def securitySubsystem =  getSubsystem(root, "urn:wildfly:elytron:")
-def tls = securitySubsystem.tls[0]
+def tls = securitySubsystem.appendNode('tls')
 
-def keyStores = tls.'key-stores'[0]
-println "This is kyestore : " + keyStores
+def keyStores = tls.appendNode('key-stores')
 def keyStore = keyStores.appendNode('key-store', ['name':'twoWayKS'])
 def credentialReference = keyStore.appendNode('credential-reference',['clear-text':'changeit'])
 def implementation = keyStore.appendNode('implementation',['type':'JKS'])
@@ -66,14 +65,14 @@ def credentialReference2 = keyStore2.appendNode('credential-reference',['clear-t
 def implementation2 = keyStore2.appendNode('implementation',['type':'JKS'])
 def filePath2 = keyStore2.appendNode('file',['path':truststorePath])
 
-def keyManagers = tls.'key-managers'[0]
+def keyManagers = tls.appendNode('key-managers')
 def keyManager = keyManagers.appendNode('key-manager', ['name':'twoWayKM','key-store':'twoWayKS'])
 def credentialReferenceKM = keyManager.appendNode('credential-reference',['clear-text':'changeit'])
 
-def trustManagers = tls.appendNode('trust-managers');
+def trustManagers = tls.appendNode('trust-managers')
 def trustManager = trustManagers.appendNode('trust-manager', ['name':'twoWayTM','key-store':'twoWayTS'])
 
-def serverSslContexts = tls.'server-ssl-contexts'[0]
+def serverSslContexts = tls.appendNode('server-ssl-contexts')
 def serverSslContext = serverSslContexts.appendNode('server-ssl-context', ['name':'twoWaySSC','protocols':'TLSv1.2','need-client-auth':'true', 'key-manager':'twoWayKM', 'trust-manager':'twoWayTM'])
 
 /**

@@ -50,7 +50,6 @@ def realm = securityDomain.appendNode('realm',['name':'JBossWS','role-decoder':'
  *        <groups-properties path="/mnt/ssd/jbossws/stack/cxf/trunk/modules/testsuite/cxf-tests/target/test-classes/jbossws-roles.properties"/>
  *     </properties-realm>
 */
-println "## start securityRealms"
 def securityRealms = root.profile.subsystem.'security-realms'[0]
 def propertiesRealm = securityRealms.appendNode('properties-realm', ['name':'JBossWS'])
 def usersProperties = propertiesRealm.appendNode('users-properties',['path':usersPropFile, 'plain-text':'true'])
@@ -95,26 +94,30 @@ def secRealm = secRealms.appendNode('security-realm', ['name':'jbws-test-https-r
 def serverIdentities = secRealm.appendNode('server-identities')
 def ssl = serverIdentities.appendNode('ssl')
 ssl.appendNode('keystore', ['path':keystorePath,'keystore-password':'changeit','alias':'tomcat'])
+ *********/
+
+def tls = securitySubsystem.appendNode('tls')
+
+def keyStores = tls.appendNode('key-stores')
+def keyStore = keyStores.appendNode('key-store', ['name':'twoWayKS'])
+def credentialReference = keyStore.appendNode('credential-reference',['clear-text':'changeit'])
+def implementation = keyStore.appendNode('implementation',['type':'JKS'])
+def filePath = keyStore.appendNode('file',['path':keystorePath])
+
+def keyManagers = tls.appendNode('key-managers')
+def keyManager = keyManagers.appendNode('key-manager', ['name':'twoWayKM','key-store':'twoWayKS'])
+def credentialReferenceKM = keyManager.appendNode('credential-reference',['clear-text':'changeit'])
+
+def serverSslContexts = tls.appendNode('server-ssl-contexts')
+def serverSslContext = serverSslContexts.appendNode('server-ssl-context',
+        ['name':'twoWaySSC','protocols':'TLSv1.2','need-client-auth':'true',
+         'key-manager':'twoWayKM'])
+
 
 def server = root.profile.subsystem.server[0]
 def curHttpsListener = server.'https-listener'[0]
 if (curHttpsListener != null) server.remove(curHttpsListener)
 server.appendNode('https-listener', ['name':'jbws-test-https-listener','socket-binding':'https','security-realm':'jbws-test-https-realm'])
-*********/
-def tls = null
-for (element in securitySubsystem) {
-    if (element.name().getLocalPart() == 'tls') {
-        tls = element
-    }
-}
-
-tls.'key-stores'.'key-store'[0].'credential-reference'.@'clear-text' = "changeit"
-tls.'key-stores'.'key-store'[0].file.@path = keystorePath
-tls.'key-stores'.'key-store'[0].file[0].attributes().remove('relative-to')
-
-tls.'key-managers'.'key-manager'[0].'credential-reference'.@'clear-text' = "changeit"
-tls.'key-managers'.'key-manager'[0].@'alias-filter' = "tomcat"
-
 
 /**
  * Save the configuration to a new file
