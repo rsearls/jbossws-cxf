@@ -1023,14 +1023,59 @@
             <configuration>
               <excludes combine.children="append">
                 <!-- in cxf-tests -->
+                <!--
+                  Uses: jbws-testsuite-ssl-mutual-auth-nolegacy.groovy  ??
+                  Caused by: org.apache.cxf.transport.http.HTTPException: HTTP response '401: Unauthorized'
+                    when communicating with https://localhost:13443/ssl-mutual-auth/HelloService
+                -->
                 <exclude>org/jboss/test/ws/jaxws/cxf/clientConfig/SSLContextElytronClientConfigTestCaseForked*</exclude>
+                <!--
+                  Using: jbws-testsuite-default-nolegacy.groovy
+                  <security-domain>java:/jaas/JBossWSDigest
+                -->
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/jaas/UsernameAuthorizationDigestTestCase*</exclude>
+                <!--
+                  javax.xml.ws.WebServiceException: org.apache.cxf.service.factory.ServiceConstructionException: Failed to create service.
+                -->
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/basic/UsernameTestCase*</exclude>
+                <!--
+                uses: @SecurityDomain("JBossWSDigest")
+                -->
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/jaas/UsernameAuthorizationDigestEjbTestCase*</exclude>
+                <!--
+                    Uses: jbws-testsuite-default-nolegacy.groovy
+                    <security-domain>java:/jaas/JAASJBossWS
+                    More needed to work within elytron/jaspi element.
+                -->
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/jaas/UsernameAuthorizationTestCase*</exclude>
+                <!--
+                  Uses: jbws-testsuite-default-nolegacy.groovy
+                  security domain jaspi and clientJaspi
+                  A picketBox impl org.jboss.wsf.stack.cxf.jaspi.module.UsernameTokenServerAuthModule
+                    MUST be replaced
+                -->
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/jaspi/JaspiAuthenticationTestCase*</exclude>
+
+                <!--
+               test uses: cxf-tests/src/test/scripts/jbws-testsuite-jms-nolegacy.groovy
+
+               at org.jboss.test.ws.jaxws.samples.wsse.policy.oasis.WSSecurityPolicyExamples23xTestCase
+                   .test2313(WSSecurityPolicyExamples23xTestCase.java:170)
+               Caused by: javax.wsdl.WSDLException: WSDLException: faultCode=PARSER_ERROR:
+                 Problem parsing 'https://localhost:13443/jaxws-samples-wsse-policy-oasis-23x/SecurityService2313?wsdl'.:
+                 javax.net.ssl.SSLHandshakeException: No name matching localhost found
+              -->
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/oasis/WSSecurityPolicyExamples23xTestCase*</exclude>
+                <!--
+                  test uses: modules/testsuite/cxf-tests/src/test/scripts/jbws-testsuite-default-nolegacy.groovy
+                  Uses <security-domain>java:/jaas/JBossWS-trust-sts</security-domain>
+                  In test class, in deployment name = PL_STS_DEP
+                  test class PicketLinkSTService extends picketLink class
+                  org.picketlink.identity.federation.core.wstrust.PicketLinkSTS
+                  We need to find a replacement for it.
+                  -->
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/trust/WSTrustTestCase*</exclude>
+
                 <!-- in shared-tests -->
                 <exclude>org/jboss/test/ws/publish/EndpointPublishTestCase*</exclude>
                 <exclude>org/jboss/test/ws/jaxws/jbws944/JBWS944TestCase*</exclude>

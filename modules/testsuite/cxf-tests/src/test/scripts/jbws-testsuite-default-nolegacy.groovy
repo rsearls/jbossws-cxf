@@ -4,7 +4,6 @@ def root = new XmlParser().parse(inputFile)
  * Fix logging: optionally remove CONSOLE handler and set a specific log file
  *
  */
-
 def logHandlers = root.profile.subsystem.'root-logger'.handlers[0]
 def consoleHandler = logHandlers.find{it.@name == 'CONSOLE'}
 if (!session.userProperties['enableServerLoggingToConsole'] && !project.properties['enableServerLoggingToConsole']) logHandlers.remove(consoleHandler)
@@ -54,13 +53,17 @@ def digestDomain = securityDomains.appendNode('security-domain', ['name':'ws-dig
 def digestRefRealm = digestDomain.appendNode('realm',['name':'ws-digest-domain','role-decoder':'groups-to-roles'])
 
 
-//def legacyDomain = securityDomains.appendNode('security-domain', ['name':'JAASJBossWS','default-realm':'JAASJBossWSRealm','permission-mapper':'default-permission-mapper'])
-//def jaasJBossWSRealm = legacyDomain.appendNode('realm',['name':'JAASJBossWSRealm'])
+def legacyDomain = securityDomains.appendNode('security-domain', ['name':'JAASJBossWS','default-realm':'JAASJBossWSRealm','permission-mapper':'default-permission-mapper'])
+def jaasJBossWSRealm = legacyDomain.appendNode('realm',['name':'JAASJBossWSRealm'])
 
 //def legacyDigestDomain = securityDomains.appendNode('security-domain', ['name':'JBossWSDigest','default-realm':'JAASJBossWSDigestRealm','permission-mapper':'default-permission-mapper'])
 //def jaasJBossWDigestRealm = legacyDigestDomain.appendNode('realm',['name':'JAASJBossWSDigestRealm'])
 
+def jaspiDomain = securityDomains.appendNode('security-domain', ['name':'jaspi','default-realm':'jaspi','permission-mapper':'default-permission-mapper'])
+def jaspiRealm = jaspiDomain.appendNode('realm',['name':'jaspi'])
 
+def clientJaspiDomain = securityDomains.appendNode('security-domain', ['name':'clientJaspi','default-realm':'clientJaspi','permission-mapper':'default-permission-mapper'])
+def clientJaspiRealm = clientJaspiDomain.appendNode('realm',['name':'clientJaspi'])
 
 /**
  *            <security-realms>
@@ -97,8 +100,40 @@ def digestRealm = securityRealms.appendNode('properties-realm', ['name':'ws-dige
 def digestUserProperties = digestRealm.appendNode('users-properties',['path': testResourcesDir + '/jaxws/cxf/httpauth/WEB-INF/ws-digest-users.properties'])
 def digestGroupsProperties = digestRealm.appendNode('groups-properties',['path': testResourcesDir + '/jaxws/cxf/httpauth/WEB-INF/ws-roles.properties'])
 
+def jaspiPropertiesRealm = securityRealms.appendNode('properties-realm', ['name':'jaspi'])
+def jaspiUsersProperties = jaspiPropertiesRealm.appendNode('users-properties',['path':usersPropFile, 'plain-text':'true'])
+def jaspiGroupsProperties = jaspiPropertiesRealm.appendNode('groups-properties',['path':rolesPropFile])
 
+def clientJaspiPropertiesRealm = securityRealms.appendNode('properties-realm', ['name':'clientJaspi'])
+def clientJaspiUsersProperties = clientJaspiPropertiesRealm.appendNode('users-properties',['path':usersPropFile, 'plain-text':'true'])
+def clientJaspiGroupsProperties = clientJaspiPropertiesRealm.appendNode('groups-properties',['path':rolesPropFile])
+// rls
+def jAASJBossWSRealm = securityRealms.appendNode('properties-realm', ['name':'JAASJBossWSRealm'])
+jAASJBossWSRealm.appendNode('users-properties',['path':usersPropFile, 'plain-text':'true'])
+jAASJBossWSRealm.appendNode('groups-properties',['path':rolesPropFile])
 
+def jaspiAuthen = null
+for (element in securitySubsystem) {
+    if (element.name().getLocalPart() == 'jaspi') {
+        jaspiAuthen = element
+        break
+    }
+}
+
+if (jaspiAuthen == null) {
+    jaspiAuthen = securitySubsystem.appendNode('jaspi')
+}
+
+def jaspiConfiguration1 = jaspiAuthen.appendNode('jaspi-configuration', ['name' : 'jaspi-jaas-lm-stack'])
+def serverAuthModules1 = jaspiConfiguration1.appendNode('server-auth-modules')
+serverAuthModules1.appendNode('server-auth-module',
+        ['class-name' : 'org.jboss.wsf.stack.cxf.jaspi.module.UsernameTokenServerAuthModule',
+         'module' : 'org.jboss.ws.jaxws-client']);
+
+def jaspiConfiguration2 = jaspiAuthen.appendNode('jaspi-configuration', ['name' : 'clientJaspi-jaas-lm-stack'])
+def serverAuthModules2 = jaspiConfiguration2.appendNode('server-auth-modules')
+serverAuthModules2.appendNode('server-auth-module',
+        ['class-name' : 'org.jboss.wsf.stack.cxf.jaspi.client.module.SOAPClientAuthModule', 'module' : 'org.jboss.ws.jaxws-client'])
 
 /**
  *             <http>
@@ -161,7 +196,7 @@ def appSecurityDomains = ejbSubsystem.'application-security-domains'[0]
 
 
 def ejbSecurityDomain1 = appSecurityDomains.appendNode('application-security-domain', ['name':'JBossWS','security-domain':'JBossWS'])
-//def ejbSecurityDomain2 = appSecurityDomains.appendNode('application-security-domain', ['name':'JAASJBossWS','security-domain':'JAASJBossWS'])
+def ejbSecurityDomain2 = appSecurityDomains.appendNode('application-security-domain', ['name':'JAASJBossWS','security-domain':'JAASJBossWS'])
 def ejbSecurityDomain3 = appSecurityDomains.appendNode('application-security-domain', ['name':'ws-basic-domain','security-domain':'ws-basic-domain'])
 //def ejbSecurityDomain4 = appSecurityDomains.appendNode('application-security-domain', ['name':'JBossWSDigest','security-domain':'JBossWSDigest'])
 
@@ -173,6 +208,8 @@ def undertowAppSecurityDomains = undertowSubsystem.'application-security-domains
 def appSecurityDomain = undertowAppSecurityDomains.appendNode('application-security-domain', ['name':'JBossWS','http-authentication-factory':'JBossWS'])
 def basicAppSecurityDomain = undertowAppSecurityDomains.appendNode('application-security-domain', ['name':'ws-basic-domain','http-authentication-factory':'ws-basic-domain'])
 def digestAppSecurityDomain = undertowAppSecurityDomains.appendNode('application-security-domain', ['name':'ws-digest-domain','http-authentication-factory':'ws-digest-domain'])
+def jaspiAppSecurityDomain = undertowAppSecurityDomains.appendNode('application-security-domain', ['name':'jaspi','security-domain':'jaspi'])
+def clientJaspiAppSecurityDomain = undertowAppSecurityDomains.appendNode('application-security-domain', ['name':'clientJaspi','security-domain':'clientJaspi'])
 
 
 //-------------JAAS for legacy security configuraiton Begin--------------------------------------------//
@@ -376,6 +413,7 @@ def tls = null
 for (element in securitySubsystem) {
     if (element.name().getLocalPart() == 'tls') {
         tls = element
+        break
     }
 }
 
