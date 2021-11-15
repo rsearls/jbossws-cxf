@@ -21,8 +21,8 @@
  */
 package org.jboss.test.ws.jaxws.cxf.noIntegration;
 
-import javax.servlet.ServletConfig;
-import javax.xml.ws.Endpoint;
+import jakarta.servlet.ServletConfig;
+import jakarta.xml.ws.Endpoint;
 
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
@@ -30,10 +30,8 @@ import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
 
 public class CXFEndpointServlet extends CXFNonSpringServlet
 {
-
    private static final long serialVersionUID = -7460429764356482207L;
 
-   @Override
    public void loadBus(ServletConfig servletConfig)
    {
       super.loadBus(servletConfig);
