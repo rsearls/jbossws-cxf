@@ -24,11 +24,11 @@ package org.jboss.wsf.stack.cxf.jaspi.config;
 import java.util.Properties;
 
 import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.message.AuthException;
-import javax.security.auth.message.config.AuthConfigFactory;
-import javax.security.auth.message.config.AuthConfigProvider;
-import javax.security.auth.message.config.ClientAuthConfig;
-import javax.security.auth.message.config.ServerAuthConfig;
+import jakarta.security.auth.message.AuthException;
+import jakarta.security.auth.message.config.AuthConfigFactory;
+import jakarta.security.auth.message.config.AuthConfigProvider;
+import jakarta.security.auth.message.config.ClientAuthConfig;
+import jakarta.security.auth.message.config.ServerAuthConfig;
 
 /** 
  * Factory class used to getJBossWSClientAuthConfig and JBossWSServerAuthConfig

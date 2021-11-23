@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
-import javax.jws.WebService;
+import jakarta.jws.WebService;
 import javax.xml.namespace.QName;
 import jakarta.xml.ws.BindingType;
 import jakarta.xml.ws.WebServiceProvider;
