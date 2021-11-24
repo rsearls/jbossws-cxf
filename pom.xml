@@ -104,11 +104,8 @@
     <neethi.version>3.1.1</neethi.version>
     <opensaml.version>3.3.1</opensaml.version>
     <annotation.api.version>2.0.1.Final</annotation.api.version>
-    <saaj.api.version>1.0.2.Final</saaj.api.version>
+    <saaj.api.version>1.0.0.Final-SNAPSHOT</saaj.api.version>
     <saaj.impl.version>1.4.1.SP1</saaj.impl.version>
-    <!-- ##
-    <servlet.api.version>2.0.0.Final</servlet.api.version>
-    ## -->
     <stax.api.version>1.0-2</stax.api.version>
     <jms.api.version>1.0.2.Final</jms.api.version>
     <velocity.version>2.3</velocity.version>
@@ -772,17 +769,11 @@
       </dependency>
 
       <dependency>
-        <groupId>org.jboss.spec.javax.xml.soap</groupId>
-        <artifactId>jboss-saaj-api_1.4_spec</artifactId>
+        <groupId>org.jboss.spec.jakarta.xml.soap</groupId>
+        <artifactId>jboss-saaj-api_2.0_spec</artifactId>
         <version>${saaj.api.version}</version>
       </dependency>
-      <!-- ###
-      <dependency>
-        <groupId>org.jboss.spec.javax.xml.ws</groupId>
-        <artifactId>jboss-jaxws-api_2.3_spec</artifactId>
-        <version>${jaxws.api.version}</version>
-      </dependency>
-      ### -->
+
       <dependency>
         <groupId>jakarta.xml.ws</groupId>
         <artifactId>jakarta.xml.ws-api</artifactId>
