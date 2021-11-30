@@ -56,14 +56,20 @@ public class JBossWSAuthConfigProvider implements AuthConfigProvider
    public ClientAuthConfig getClientAuthConfig(String layer, String appContext, CallbackHandler handler)
          throws AuthException, SecurityException
    {
-      return new JBossWSClientAuthConfig(layer, appContext, handler, contextProperties);
+      //return new JBossWSClientAuthConfig(layer, appContext, handler, contextProperties);
+      // todo null MUST be replaced with a valid call from elytron.
+      // this is disabled so project will compile.
+      return null;
    }
 
    @Override
    public ServerAuthConfig getServerAuthConfig(String layer, String appContext, CallbackHandler handler)
          throws AuthException, SecurityException
    {
-      return new JBossWSServerAuthConfig(layer, appContext, handler, contextProperties);
+      //return new JBossWSServerAuthConfig(layer, appContext, handler, contextProperties);
+      // todo null MUST be replaced with a valid call from elytron.
+      // this is disabled so project will compile.
+      return null;
    }
 
    @Override

@@ -942,7 +942,6 @@
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/trust/WSTrustHolderOfKeyTestCase*</exclude>
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/trust/WSTrustOnBehalfOfTestCase*</exclude>
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/trust/WSTrustTestCase*</exclude>
-                <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/trust/WSTrustPicketLinkTestCase*</exclude>
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/basic/SignEncryptGCMTestCase*</exclude>
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/basic/AnnotatedSignEncryptTestCase*</exclude>
                 <exclude>org/jboss/test/ws/jaxws/cxf/jbws3648/PolicyAttachmentTestCase*</exclude>

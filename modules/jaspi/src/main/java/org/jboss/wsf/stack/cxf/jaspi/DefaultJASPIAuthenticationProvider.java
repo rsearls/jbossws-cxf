@@ -24,11 +24,11 @@ package org.jboss.wsf.stack.cxf.jaspi;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.security.auth.message.config.AuthConfigFactory;
-import javax.security.auth.message.config.AuthConfigProvider;
-import javax.security.auth.message.config.ClientAuthConfig;
-import javax.security.auth.message.config.ServerAuthConfig;
-import javax.security.auth.message.config.ServerAuthContext;
+import jakarta.security.auth.message.config.AuthConfigFactory;
+import jakarta.security.auth.message.config.AuthConfigProvider;
+import jakarta.security.auth.message.config.ClientAuthConfig;
+import jakarta.security.auth.message.config.ServerAuthConfig;
+import jakarta.security.auth.message.config.ServerAuthContext;
 
 import org.apache.cxf.Bus;
 import org.apache.cxf.endpoint.Client;
@@ -51,6 +51,7 @@ import org.jboss.wsf.stack.cxf.jaspi.config.JBossWSAuthConstants;
 import org.jboss.wsf.stack.cxf.jaspi.interceptor.JaspiSeverInInterceptor;
 import org.jboss.wsf.stack.cxf.jaspi.interceptor.JaspiSeverOutInterceptor;
 import org.jboss.wsf.stack.cxf.jaspi.log.Loggers;
+import org.jboss.wsf.stack.cxf.jaspi.tmp.TmpServerAuthContext;
 
 /**
  * Class to enable the jaspi authentication interceptors in cxf bus , endpoint or client
@@ -99,7 +100,10 @@ public class DefaultJASPIAuthenticationProvider implements JASPIAuthenticationPr
       try
       {
          ClientAuthConfig clientConfig = provider.getClientAuthConfig("soap", appId, callbackHandler);
-         JaspiClientAuthenticator clientAuthenticator = new JaspiClientAuthenticator(clientConfig, securityDomain, jai);
+         //new JaspiClientAuthenticator(clientConfig, securityDomain, jai);
+         // todo null MUST be replaced with a valid call from elytron.
+         // this is disabled so project will compile.
+         JaspiClientAuthenticator clientAuthenticator = null;
          client.getInInterceptors().add(new JaspiClientInInterceptor(clientAuthenticator));
          client.getOutInterceptors().add(new JaspiClientOutInterceptor(clientAuthenticator));
       }
@@ -155,7 +159,10 @@ public class DefaultJASPIAuthenticationProvider implements JASPIAuthenticationPr
          Bus bus = dep.getAttachment(Bus.class);
          serverContextProperties.put(Bus.class, bus);
          String authContextID = dep.getSimpleName();
-         ServerAuthContext sctx = serverConfig.getAuthContext(authContextID, null, serverContextProperties);
+         //ServerAuthContext sctx = serverConfig.getAuthContext(authContextID, null, serverContextProperties);
+         // todo TmpServerAuthContext MUST be replaced with a valid call from elytron.
+         // this is disabled so project will compile.
+         TmpServerAuthContext sctx = new TmpServerAuthContext();
          JaspiServerAuthenticator serverAuthenticator = new JaspiServerAuthenticator(sctx);
          bus.getInInterceptors().add(new JaspiSeverInInterceptor(serverAuthenticator));
          bus.getOutInterceptors().add(new JaspiSeverOutInterceptor(serverAuthenticator));
@@ -211,7 +218,10 @@ public class DefaultJASPIAuthenticationProvider implements JASPIAuthenticationPr
          serverContextProperties.put("jaspi-policy", jai);
          serverContextProperties.put(jakarta.xml.ws.Endpoint.class, endpointImpl);
          String authContextID = endpointImpl.getBeanName();
-         ServerAuthContext sctx = serverConfig.getAuthContext(authContextID, null, serverContextProperties);
+         //ServerAuthContext sctx = serverConfig.getAuthContext(authContextID, null, serverContextProperties);
+         // todo TmpServerAuthContext MUST be replaced with a valid call from elytron.
+         // this is disabled so project will compile.
+         TmpServerAuthContext sctx = new TmpServerAuthContext();
          serverAuthenticator = new JaspiServerAuthenticator(sctx);
          endpointImpl.getInInterceptors().add(new JaspiSeverInInterceptor(serverAuthenticator));
          endpointImpl.getOutInterceptors().add(new JaspiSeverOutInterceptor(serverAuthenticator));
