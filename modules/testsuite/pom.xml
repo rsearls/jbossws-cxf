@@ -19,7 +19,6 @@
     <surefire.memory.args>-Xmx640m</surefire.memory.args>
     <surefire.jdwp.args>-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005</surefire.jdwp.args>
     <surefire.management.args>-Dcom.sun.management.jmxremote</surefire.management.args>
-    <additionalGroovyScriptSuffix />
     <test.archive.directory>${project.build.directory}/test-libs</test.archive.directory>
     <test.classes.directory>${project.build.directory}/test-classes</test.classes.directory>
     <test.resources.directory>${project.build.directory}/test-resources</test.resources.directory>
@@ -661,7 +660,6 @@
     <profile>
       <id>wildfly2500</id>
       <properties>
-        <additionalGroovyScriptSuffix>-nolegacy</additionalGroovyScriptSuffix>
         <jboss.remoting.protocol>remote+http</jboss.remoting.protocol>
         <jboss.initial.context.factory>org.wildfly.naming.client.WildFlyInitialContextFactory</jboss.initial.context.factory>
       </properties>
@@ -741,7 +739,6 @@
     <profile>
       <id>wildfly2600</id>
       <properties>
-        <additionalGroovyScriptSuffix>-nolegacy</additionalGroovyScriptSuffix>
         <jboss.remoting.protocol>remote+http</jboss.remoting.protocol>
         <jboss.initial.context.factory>org.wildfly.naming.client.WildFlyInitialContextFactory</jboss.initial.context.factory>
       </properties>
@@ -825,7 +822,6 @@
     <profile>
       <id>wildfly2700</id>
       <properties>
-        <additionalGroovyScriptSuffix>-nolegacy</additionalGroovyScriptSuffix>
         <jboss.remoting.protocol>remote+http</jboss.remoting.protocol>
         <jboss.initial.context.factory>org.wildfly.naming.client.WildFlyInitialContextFactory</jboss.initial.context.factory>
       </properties>
@@ -886,12 +882,8 @@
                 <!-- https://issues.redhat.com/browse/JBWS-4230 -->
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/jaas/UsernameAuthorizationDigestTestCase*</exclude>
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/jaas/UsernameAuthorizationTestCase*</exclude>
-                <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/jaas/UsernameAuthorizationDigestEjbTestCase*</exclude>
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/jaspi/JaspiAuthenticationTestCase*</exclude>
-                <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/basic/UsernameTestCase*</exclude>
-                <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/oasis/WSSecurityPolicyExamples23xTestCase*</exclude>
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/trust/WSTrustTestCase*</exclude>
-                <exclude>org/jboss/test/ws/jaxws/cxf/clientConfig/SSLContextElytronClientConfigTestCaseForked*</exclude>
                 <exclude>org/jboss/test/ws/publish/EndpointPublishTestCase*</exclude>
                 <!--https://issues.redhat.com/browse/WFLY-15563 -->
                 <exclude>org/jboss/test/ws/jaxws/cxf/jbws3628/JBWS3628TestCase*</exclude>
@@ -902,21 +894,6 @@
           </plugin>
         </plugins>
       </build>
-    </profile>
-    <!--
-    Name:  elytron
-    Descr: Run tests against container with elytron security set instead of the legacy one
-    -->
-    <profile>
-      <id>elytron</id>
-      <activation>
-        <property>
-          <name>elytron</name>
-        </property>
-      </activation>
-      <properties>
-        <additionalGroovyScriptSuffix>-elytron</additionalGroovyScriptSuffix>
-      </properties>
     </profile>
 
     <!--
