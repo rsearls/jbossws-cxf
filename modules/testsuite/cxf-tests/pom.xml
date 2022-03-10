@@ -340,49 +340,41 @@
             					<groupId>org.apache.cxf</groupId>
             					<artifactId>cxf-rt-frontend-jaxws</artifactId>
             					<version>${test.cxf.version}</version>
-                           <classifier>jakarta</classifier>
             				</artifactItem>
             				<artifactItem>
             					<groupId>org.apache.cxf</groupId>
             					<artifactId>cxf-rt-frontend-simple</artifactId>
             					<version>${test.cxf.version}</version>
-                           <classifier>jakarta</classifier>
             				</artifactItem>
             				<artifactItem>
             					<groupId>org.apache.cxf</groupId>
             					<artifactId>cxf-core</artifactId>
             					<version>${test.cxf.version}</version>
-                           <classifier>jakarta</classifier>
             				</artifactItem>
             				<artifactItem>
             					<groupId>org.apache.cxf</groupId>
             					<artifactId>cxf-rt-transports-http</artifactId>
             					<version>${test.cxf.version}</version>
-                           <classifier>jakarta</classifier>
             				</artifactItem>
             				<artifactItem>
             					<groupId>org.apache.cxf</groupId>
             					<artifactId>cxf-rt-bindings-soap</artifactId>
             					<version>${test.cxf.version}</version>
-                           <classifier>jakarta</classifier>
             				</artifactItem>
             				<artifactItem>
             					<groupId>org.apache.cxf</groupId>
             					<artifactId>cxf-rt-databinding-jaxb</artifactId>
             					<version>${test.cxf.version}</version>
-                           <classifier>jakarta</classifier>
             				</artifactItem>
             				<artifactItem>
             					<groupId>org.apache.cxf</groupId>
             					<artifactId>cxf-rt-ws-policy</artifactId>
             					<version>${test.cxf.version}</version>
-                           <classifier>jakarta</classifier>
             				</artifactItem>
             				<artifactItem>
             					<groupId>org.apache.cxf</groupId>
             					<artifactId>cxf-rt-wsdl</artifactId>
             					<version>${test.cxf.version}</version>
-                           <classifier>jakarta</classifier>
             				</artifactItem>
             			</artifactItems>
             			<outputDirectory>target/cxf-embedded</outputDirectory>
