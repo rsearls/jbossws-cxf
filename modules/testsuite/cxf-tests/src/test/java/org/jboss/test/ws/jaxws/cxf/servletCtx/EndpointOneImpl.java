@@ -27,7 +27,7 @@ import javax.annotation.Resource;
 import javax.jws.Oneway;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.xml.ws.WebServiceContext;
 import jakarta.xml.ws.handler.MessageContext;
 import jakarta.xml.ws.soap.Addressing;

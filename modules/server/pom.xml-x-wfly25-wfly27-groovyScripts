@@ -1,62 +1,51 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
-  <name>JBoss Web Services - Stack CXF Runtime Client jakarta</name>
-  <artifactId>jbossws-cxf-client</artifactId>
+  <name>JBoss Web Services - Stack CXF Server</name>
+  <artifactId>jbossws-cxf-server</artifactId>
   <packaging>jar</packaging>
   
+  <!-- Parent -->
   <parent>
     <groupId>org.jboss.ws.cxf</groupId>
     <artifactId>jbossws-cxf</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
+    <version>5.5.1-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
   
   <!-- Dependencies -->
   <dependencies>
+  
+    <dependency> <!-- Always make sure jbossws-cxf-factories dependency is explicitly declared before anything transitively pulling CXF -->
+      <groupId>org.jboss.ws.cxf</groupId>
+      <artifactId>jbossws-cxf-factories</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     
+    <dependency>
+      <groupId>org.jboss.ws.cxf</groupId>
+      <artifactId>jbossws-cxf-client</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.jboss.spec.javax.ejb</groupId>
+      <artifactId>jboss-ejb-api_3.2_spec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.servlet</groupId>
+      <artifactId>jboss-servlet-api_4.0_spec</artifactId>
+    </dependency>
     <!-- jbossws dependencies -->
-    <dependency>
-      <groupId>org.jboss.modules</groupId>
-      <artifactId>jboss-modules</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.ws</groupId>
-      <artifactId>jbossws-api</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.jboss.ws</groupId>
       <artifactId>jbossws-common</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jboss.ws</groupId>
-      <artifactId>jbossws-common-tools</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.ws</groupId>
       <artifactId>jbossws-spi</artifactId>
     </dependency>
-    <dependency> <!-- Always make sure jbossws-cxf-factories dependency is explicitly declared before anything transitively pulling CXF -->
-      <groupId>org.jboss.ws.cxf</groupId>
-      <artifactId>jbossws-cxf-factories</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.ws.cxf</groupId>
-      <artifactId>jbossws-cxf-transports-udp</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.ws.cxf</groupId>
-      <artifactId>jbossws-cxf-transports-undertow</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    
     <!-- CXF dependencies -->
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-core</artifactId>
-    </dependency>
     <dependency>
         <groupId>org.apache.cxf</groupId>
         <artifactId>cxf-rt-features-logging</artifactId>
@@ -75,16 +64,19 @@
     </dependency>
     <dependency>
       <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-features-clustering</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-management</artifactId>
+    </dependency>  
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-transports-http</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-rt-transports-http-hc</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-transports-jms</artifactId>
-      <classifier>jakarta</classifier>
     </dependency>
     <dependency>
       <groupId>org.apache.cxf</groupId>
@@ -106,11 +98,6 @@
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-ws-security</artifactId>
     </dependency>
-    <!-- workaround for maven bug processing transitive excludes [MNG-5761]-->
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-rt-wsdl</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-tools-java2ws</artifactId>
@@ -126,6 +113,10 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-tools-wsdlto-frontend-jaxws</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cxf.services.sts</groupId>
+      <artifactId>cxf-services-sts-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.cxf.services.ws-discovery</groupId>
@@ -168,10 +159,6 @@
       <artifactId>stax-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.sun.xml.fastinfoset</groupId>
-      <artifactId>FastInfoset</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.apache.santuario</groupId>
       <artifactId>xmlsec</artifactId>
     </dependency>
@@ -183,37 +170,23 @@
       <groupId>org.ow2.asm</groupId>
       <artifactId>asm</artifactId>
     </dependency>
-    
-    <!--
-    useStrictFiltering requires dependency in all included modules
-    http://jira.codehaus.org/browse/MASSEMBLY-317
-    -->
-    <dependency>
-      <groupId>jakarta.jws</groupId>
-      <artifactId>jakarta.jws-api</artifactId>
-    </dependency>
 
     <dependency>
-      <groupId>jakarta.xml.bind</groupId>
-      <artifactId>jakarta.xml.bind-api</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>jakarta.xml.ws</groupId>
-      <artifactId>jakarta.xml.ws-api</artifactId>
-    </dependency> 
-    
-    <dependency>
-      <groupId>org.jboss.spec.javax.xml.soap</groupId>
-      <artifactId>jboss-saaj-api_1.4_spec</artifactId>
+      <groupId>javax.jws</groupId>
+      <artifactId>jsr181-api</artifactId>
     </dependency>
     
+    <!-- jboss provided -->
     <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
+      <groupId>org.picketbox</groupId>
+      <artifactId>picketbox</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
     </dependency>
     
-    <!-- [JBWS-3722] Explicit JAXB dependencies to ensure the dependency management from jbossws-cxf pom.xml applies -->
+    <!-- transitive dependencies -->
     <dependency>
       <groupId>org.glassfish.jaxb</groupId>
       <artifactId>jaxb-runtime</artifactId>
@@ -230,22 +203,26 @@
       <groupId>com.sun.xml.bind.external</groupId>
       <artifactId>rngom</artifactId>
     </dependency>
-    
-    <!-- Explicit saaj-impl dependency in synch with default SAAJ factories expected by our SAAJ API -->
     <dependency>
-      <groupId>com.sun.xml.messaging.saaj</groupId>
-      <artifactId>saaj-impl</artifactId>
-    </dependency>
-    
-
-    <!-- jboss provided -->
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
+      <groupId>org.jboss.spec.javax.xml.bind</groupId>
+      <artifactId>jboss-jaxb-api_2.3_spec</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
+      <groupId>org.jboss.spec.javax.xml.soap</groupId>
+      <artifactId>jboss-saaj-api_1.4_spec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.jms</groupId>
+      <artifactId>jboss-jms-api_2.0_spec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.security.jacc</groupId>
+      <artifactId>jboss-jacc-api_1.5_spec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.logging</groupId>
@@ -256,34 +233,51 @@
       <artifactId>jboss-logging-processor</artifactId>
       <scope>provided</scope>
     </dependency>
-    
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
+      <groupId>org.wildfly.security</groupId>
+      <artifactId>wildfly-elytron-auth-server</artifactId>
+      <version>${wildfly.elytron.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.wildfly.security</groupId>
+      <artifactId>wildfly-elytron-credential</artifactId>
+      <version>${wildfly.elytron.version}</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
-
+  
+  <!-- Plugins -->
   <build>
+    <resources>
+      <resource>
+        <targetPath>.</targetPath>
+        <directory>src/main/resources/jbossws-cxf-server.jar</directory>
+      </resource>
+      <resource>
+        <directory>src/main/java</directory>
+         <includes>
+          <include>**/*.properties</include>
+         </includes>
+      </resource>
+    </resources>
     <plugins>
+      <!-- http://jira.codehaus.org/browse/MANTRUN-89 -->
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <showDeprecation>false</showDeprecation>
-          <compilerArguments>
-            <AgeneratedTranslationFilesPath>${project.basedir}/target/generated-translation-files</AgeneratedTranslationFilesPath>
-          </compilerArguments>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skipTests>true</skipTests> <!-- RLS debug only  stmt TODO remove -->
-          <failIfNoTests>false</failIfNoTests>
-          <classpathDependencyExcludes>
-            <classpathDependencyExclude>org.jboss.modules:jboss-modules</classpathDependencyExclude>
-          </classpathDependencyExcludes>
-        </configuration>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <ant antfile="src/main/scripts/antrun-beans-config.xml" />
+              </target>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -328,7 +322,6 @@
 
                         <!-- We want to use JBoss versions of these APIs -->
                         <exclude>javax.annotation:javax.annotation-api:*:*:compile</exclude>
-                        <exclude>jakarta.annotation:*:*:compile</exclude>
                         <exclude>javax.ejb:ejb-api</exclude>
                         <exclude>javax.jms:javax.jms-api</exclude>
                         <exclude>javax.security.auth.message:javax.security.auth.message-api</exclude>

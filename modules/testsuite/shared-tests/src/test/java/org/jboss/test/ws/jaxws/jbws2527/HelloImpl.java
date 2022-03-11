@@ -24,7 +24,7 @@ package org.jboss.test.ws.jaxws.jbws2527;
 import java.security.Principal;
 import javax.annotation.Resource;
 import javax.jws.WebService;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 

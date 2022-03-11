@@ -23,7 +23,7 @@ package org.jboss.test.ws.jaxws.cxf.jbws3773;
 
 import javax.annotation.Resource;
 import javax.jws.WebService;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.xml.ws.WebServiceContext;
 import jakarta.xml.ws.handler.MessageContext;
 import jakarta.xml.ws.soap.Addressing;

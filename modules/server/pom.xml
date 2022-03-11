@@ -246,6 +246,18 @@
       <artifactId>jboss-logging-processor</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.wildfly.security</groupId>
+      <artifactId>wildfly-elytron-auth-server</artifactId>
+      <version>${wildfly.elytron.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.wildfly.security</groupId>
+      <artifactId>wildfly-elytron-credential</artifactId>
+      <version>${wildfly.elytron.version}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   
   <!-- Plugins -->
@@ -323,7 +335,7 @@
 
                         <!-- We want to use JBoss versions of these APIs -->
                         <exclude>javax.annotation:javax.annotation-api:*:*:compile</exclude>
-                        <exclude>jakarta.annotation:jakarta.annotation-api:*:*:compile</exclude>
+                        <exclude>jakarta.annotation:*:*:compile</exclude>
                         <exclude>javax.ejb:ejb-api</exclude>
                         <exclude>javax.jms:javax.jms-api</exclude>
                         <exclude>javax.security.auth.message:javax.security.auth.message-api</exclude>
