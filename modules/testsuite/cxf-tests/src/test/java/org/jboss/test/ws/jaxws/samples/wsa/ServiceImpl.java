@@ -22,7 +22,7 @@
 package org.jboss.test.ws.jaxws.samples.wsa;
 
 import javax.jws.WebService;
-import javax.xml.ws.soap.Addressing;
+import jakarta.xml.ws.soap.Addressing;
 
 import org.jboss.logging.Logger;
 

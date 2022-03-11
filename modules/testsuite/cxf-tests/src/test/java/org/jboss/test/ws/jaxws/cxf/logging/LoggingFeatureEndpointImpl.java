@@ -25,7 +25,7 @@ import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import javax.xml.ws.WebServiceContext;
+import jakarta.xml.ws.WebServiceContext;
 
 import org.jboss.logging.Logger;
 import org.apache.cxf.feature.Features;

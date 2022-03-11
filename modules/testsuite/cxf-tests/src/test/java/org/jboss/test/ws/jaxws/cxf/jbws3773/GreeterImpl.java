@@ -24,9 +24,9 @@ package org.jboss.test.ws.jaxws.cxf.jbws3773;
 import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
-import javax.xml.ws.soap.Addressing;
+import jakarta.xml.ws.WebServiceContext;
+import jakarta.xml.ws.handler.MessageContext;
+import jakarta.xml.ws.soap.Addressing;
 
 @WebService(serviceName = "SOAPService", portName = "SoapPort", 
             endpointInterface = "org.jboss.test.ws.jaxws.cxf.jbws3773.Greeter", 

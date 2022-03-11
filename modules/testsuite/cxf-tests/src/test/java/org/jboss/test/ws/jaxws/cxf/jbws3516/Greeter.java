@@ -27,8 +27,8 @@ import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.ws.RequestWrapper;
-import javax.xml.ws.ResponseWrapper;
+import jakarta.xml.ws.RequestWrapper;
+import jakarta.xml.ws.ResponseWrapper;
 @WebService(targetNamespace = "http://jboss.org/hello_world", name = "Greeter")
 @XmlSeeAlso({ObjectFactory.class})
 public interface Greeter {
