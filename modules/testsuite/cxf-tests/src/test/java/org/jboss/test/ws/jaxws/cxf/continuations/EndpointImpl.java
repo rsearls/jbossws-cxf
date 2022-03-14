@@ -27,8 +27,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
 import javax.annotation.Resource;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
+import jakarta.jws.WebService;
+import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.ws.WebServiceContext;
 
 import org.apache.cxf.continuations.Continuation;

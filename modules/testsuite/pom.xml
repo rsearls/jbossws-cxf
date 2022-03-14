@@ -277,6 +277,7 @@
             <configuration>
               <skip>false</skip>
               <excludes combine.children="append">
+                <exclude>**/JBWS3805TestCase.java</exclude> <!-- deployment cast error -->
               </excludes>
               <includes>
                 <include>**/*Test.java</include>

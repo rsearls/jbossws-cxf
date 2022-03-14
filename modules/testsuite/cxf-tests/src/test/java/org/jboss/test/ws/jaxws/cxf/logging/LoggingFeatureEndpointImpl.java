@@ -23,8 +23,8 @@ package org.jboss.test.ws.jaxws.cxf.logging;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.jws.WebMethod;
-import javax.jws.WebService;
+import jakarta.jws.WebMethod;
+import jakarta.jws.WebService;
 import jakarta.xml.ws.WebServiceContext;
 
 import org.jboss.logging.Logger;

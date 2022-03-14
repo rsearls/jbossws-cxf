@@ -21,7 +21,7 @@
  */
 package org.jboss.test.ws.jaxws.samples.wsa;
 
-import javax.jws.WebService;
+import jakarta.jws.WebService;
 import jakarta.xml.ws.soap.Addressing;
 
 import org.jboss.logging.Logger;

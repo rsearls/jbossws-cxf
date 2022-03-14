@@ -27,7 +27,7 @@ import java.util.Map;
 
 import jakarta.activation.DataHandler;
 import javax.annotation.Resource;
-import javax.jws.WebService;
+import jakarta.jws.WebService;
 import jakarta.xml.ws.WebServiceContext;
 import jakarta.xml.ws.handler.MessageContext;
 

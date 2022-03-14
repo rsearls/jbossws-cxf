@@ -21,9 +21,9 @@
  */
 package org.jboss.test.ws.jaxws.cxf.jbws3809;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.soap.SOAPBinding;
+import jakarta.jws.WebMethod;
+import jakarta.jws.WebParam;
+import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.ws.WebServiceProvider;
 
 /**

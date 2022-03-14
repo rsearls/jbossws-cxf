@@ -139,7 +139,7 @@
 
     <modular.jdk.args />
     <modular.jdk.props />
-    <jakarta.jws-api.version>2.1.0</jakarta.jws-api.version>
+    <jakarta.jws-api.version>3.0.0</jakarta.jws-api.version>
     <!--
     <jakarta.xml.bind-api.version>3.0.0</jakarta.xml.bind-api.version>
     -->

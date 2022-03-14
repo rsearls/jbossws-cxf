@@ -30,8 +30,8 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import jakarta.activation.DataHandler;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
+import jakarta.jws.WebService;
+import jakarta.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlMimeType;
 import jakarta.xml.ws.BindingType;
 import jakarta.xml.ws.WebServiceException;

@@ -22,7 +22,7 @@
 package org.jboss.test.ws.jaxws.samples.advanced.retail.cc;
 
 import javax.ejb.Stateless;
-import javax.jws.WebService;
+import jakarta.jws.WebService;
 import javax.xml.ws.Response;
 
 import org.jboss.logging.Logger;
