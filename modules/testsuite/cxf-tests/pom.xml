@@ -33,6 +33,10 @@
         <artifactId>jakarta.servlet-api</artifactId>
      </dependency>
      <dependency>
+        <groupId>jakarta.xml.bind</groupId>
+        <artifactId>jakarta.xml.bind-api</artifactId>
+     </dependency>
+     <dependency>
         <groupId>com.sun.mail</groupId>
         <artifactId>jakarta.mail</artifactId>
      </dependency>

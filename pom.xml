@@ -145,9 +145,9 @@
     -->
     <jakarta.xml.bind-api.version>2.3.3</jakarta.xml.bind-api.version>
     <jakarta.xml.ws-api.version>3.0.1</jakarta.xml.ws-api.version>
-    <jakarta.jakartaee-api.version>9.1.0</jakarta.jakartaee-api.version>
     <jakarta.servlet-api.version>5.0.0</jakarta.servlet-api.version>
     <jakarta.mail.version>2.0.1</jakarta.mail.version>
+    <jakarta.xml.soap-api.version>2.0.1</jakarta.xml.soap-api.version>
   </properties>
 
   <!-- licenses -->
@@ -783,6 +783,11 @@
       </dependency>
       ### -->
       <dependency>
+        <groupId>jakarta.xml.soap</groupId>
+        <artifactId>jakarta.xml.soap-api</artifactId>
+        <version>${jakarta.xml.soap-api.version}</version>
+      </dependency>
+      <dependency>
         <groupId>jakarta.servlet</groupId>
         <artifactId>jakarta.servlet-api</artifactId>
         <version>${jakarta.servlet-api.version}</version>
@@ -791,11 +796,6 @@
         <groupId>org.jboss.spec.javax.security.auth.message</groupId>
         <artifactId>jboss-jaspi-api_1.1_spec</artifactId>
         <version>${jaspi.api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>jakarta.platform</groupId>
-        <artifactId>jakarta.jakartaee-api</artifactId>
-        <version>${jakarta.jakartaee-api.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jboss.spec.javax.security.jacc</groupId>
