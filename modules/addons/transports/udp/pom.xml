@@ -13,7 +13,6 @@
   </parent>
 
   <properties>
-    <jaxb-api.version>3.0.2</jaxb-api.version>
   </properties>
 
   <!-- Dependencies -->

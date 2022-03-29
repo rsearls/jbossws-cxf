@@ -22,8 +22,8 @@
 package org.jboss.test.ws.jaxws.samples.xop.doclit;
 
 import jakarta.activation.DataHandler;
-import javax.xml.bind.annotation.XmlMimeType;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlMimeType;
+import jakarta.xml.bind.annotation.XmlType;
 
 @XmlType(name="dataResponse", namespace = "http://org.jboss.ws/xop/doclit")
 public class DHResponse {

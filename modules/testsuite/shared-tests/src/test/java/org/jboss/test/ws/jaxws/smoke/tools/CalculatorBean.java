@@ -28,8 +28,8 @@ import java.util.Set;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import javax.xml.bind.annotation.XmlList;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.XmlList;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @WebService(targetNamespace = "http://foo.bar.com/calculator")
 public class CalculatorBean

@@ -24,7 +24,7 @@ package org.jboss.test.ws.jaxws.samples.xop.doclit;
 import jakarta.activation.DataHandler;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import javax.xml.bind.annotation.XmlMimeType;
+import jakarta.xml.bind.annotation.XmlMimeType;
 import javax.xml.ws.BindingType;
 
 @WebService

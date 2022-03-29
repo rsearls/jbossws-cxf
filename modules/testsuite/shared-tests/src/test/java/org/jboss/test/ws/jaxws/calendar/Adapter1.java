@@ -22,7 +22,7 @@
 package org.jboss.test.ws.jaxws.calendar;
 
 import java.util.Calendar;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 public class Adapter1 extends XmlAdapter<String, Calendar>
 {

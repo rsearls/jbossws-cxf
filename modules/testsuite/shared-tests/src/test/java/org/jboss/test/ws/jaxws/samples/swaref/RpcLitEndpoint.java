@@ -25,7 +25,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import jakarta.activation.DataHandler;
-import javax.xml.bind.annotation.XmlAttachmentRef;
+import jakarta.xml.bind.annotation.XmlAttachmentRef;
 
 @WebService(name="RpcLitEndpoint", serviceName="RpcLitEndpointService")
 @SOAPBinding(style = SOAPBinding.Style.RPC)

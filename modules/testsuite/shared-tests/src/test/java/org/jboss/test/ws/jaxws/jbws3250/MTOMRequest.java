@@ -22,7 +22,7 @@
 package org.jboss.test.ws.jaxws.jbws3250;
 
 import jakarta.activation.DataHandler;
-import javax.xml.bind.annotation.XmlMimeType;
+import jakarta.xml.bind.annotation.XmlMimeType;
 
 public class MTOMRequest
 {

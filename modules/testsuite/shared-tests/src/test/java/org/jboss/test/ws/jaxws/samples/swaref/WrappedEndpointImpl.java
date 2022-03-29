@@ -27,7 +27,7 @@ import jakarta.activation.DataHandler;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.ejb.Stateless;
-import javax.xml.bind.annotation.XmlAttachmentRef;
+import jakarta.xml.bind.annotation.XmlAttachmentRef;
 import javax.xml.ws.WebServiceException;
 
 import java.io.BufferedReader;

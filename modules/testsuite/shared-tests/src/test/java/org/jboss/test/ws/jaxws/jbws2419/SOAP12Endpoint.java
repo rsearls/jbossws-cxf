@@ -26,7 +26,7 @@ import static javax.xml.ws.soap.SOAPBinding.SOAP12HTTP_MTOM_BINDING;
 import jakarta.activation.DataHandler;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-import javax.xml.bind.annotation.XmlMimeType;
+import jakarta.xml.bind.annotation.XmlMimeType;
 import javax.xml.ws.BindingType;
 
 @WebService(name = "SOAP12Endpoint", targetNamespace = "http://org.jboss.ws/jaxws/jbws2419")

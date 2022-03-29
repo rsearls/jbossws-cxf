@@ -32,7 +32,7 @@ import java.util.List;
 import jakarta.activation.DataHandler;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
-import javax.xml.bind.annotation.XmlMimeType;
+import jakarta.xml.bind.annotation.XmlMimeType;
 import jakarta.xml.ws.BindingType;
 import jakarta.xml.ws.WebServiceException;
 

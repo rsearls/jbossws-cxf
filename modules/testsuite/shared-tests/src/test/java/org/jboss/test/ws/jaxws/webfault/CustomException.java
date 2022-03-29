@@ -21,7 +21,7 @@
  */
 package org.jboss.test.ws.jaxws.webfault;
 
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlTransient;
 import javax.xml.ws.WebFault;
 
 /**

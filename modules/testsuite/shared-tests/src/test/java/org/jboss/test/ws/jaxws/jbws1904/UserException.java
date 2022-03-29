@@ -21,7 +21,7 @@
  */
 package org.jboss.test.ws.jaxws.jbws1904;
 
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlType;
 import javax.xml.ws.WebFault;
 
 @WebFault

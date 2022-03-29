@@ -24,7 +24,7 @@ package org.jboss.test.ws.jaxws.samples.swaref;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.soap.SOAPBinding;
-import javax.xml.bind.annotation.XmlAttachmentRef;
+import jakarta.xml.bind.annotation.XmlAttachmentRef;
 
 @WebService(name="BareEndpoint", serviceName="BareEndpointService")
 @SOAPBinding(style = SOAPBinding.Style.DOCUMENT, parameterStyle = SOAPBinding.ParameterStyle.BARE)
