@@ -22,13 +22,20 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<module xmlns="urn:jboss:module:1.9" name="org.apache.cxf">
+<module name="org.apache.cxf" xmlns="urn:jboss:module:1.9">
 
     <resources>
         <!-- Insert resources here -->
     </resources>
 
     <dependencies>
+        <module name="java.compiler"/>
+        <module name="java.datatransfer"/>
+        <module name="java.desktop"/>
+        <module name="java.logging"/>
+        <module name="java.management"/>
+        <module name="java.naming"/>
+        <module name="java.sql"/>
         <module name="org.apache.cxf.impl" services="import">
             <imports>
                 <include path="META-INF/cxf"/> <!-- required to also pull in the bus extensions from META-INF -->
@@ -39,6 +46,7 @@
         <module name="asm.asm" />
         <module name="javax.api" />
         <module name="javax.annotation.api" />
+        <module name="javax.validation.api" optional="true"/>
         <module name="javax.jws.api" />
         <module name="javax.mail.api" />
         <module name="javax.resource.api" />
@@ -54,5 +62,11 @@
         <module name="org.apache.ws.xmlschema" />
         <module name="org.codehaus.woodstox" />
         <module name="org.apache.xml-resolver" />
+        <module name="org.springframework.spring" optional="true">
+            <imports>
+                <include path="META-INF"/>
+            </imports>
+        </module>
+        <module name="java.xml"/>
     </dependencies>
 </module>

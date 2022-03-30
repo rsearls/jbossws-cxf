@@ -22,7 +22,7 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<module xmlns="urn:jboss:module:1.9" name="org.apache.velocity">
+<module name="org.apache.velocity" xmlns="urn:jboss:module:1.9">
     <properties>
         <property name="jboss.api" value="private"/>
     </properties>
@@ -32,6 +32,8 @@
     </resources>
 
     <dependencies>
+        <module name="java.naming"/>
+        <module name="java.sql"/>
         <module name="org.apache.commons.collections"/>
         <module name="org.apache.commons.lang3"/>
         <module name="org.slf4j"/>

@@ -22,16 +22,14 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<module xmlns="urn:jboss:module:1.9" name="org.apache.cxf.ws-security">
-    <properties>
-        <property name="jboss.api" value="private"/>
-    </properties>
-    
+<module name="org.apache.cxf.ws-security" xmlns="urn:jboss:module:1.9">
     <resources>
         <!-- Insert resources here -->
     </resources>
 
     <dependencies>
+        <module name="java.logging"/>
+        <module name="java.security.jgss"/>
         <module name="asm.asm" />
         <module name="javax.api" />
         <module name="javax.annotation.api" />

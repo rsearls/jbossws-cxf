@@ -22,16 +22,16 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<module xmlns="urn:jboss:module:1.9" name="org.apache.cxf.services-sts">
-    <properties>
-        <property name="jboss.api" value="private"/>
-    </properties>
-    
+<module name="org.apache.cxf.services-sts" xmlns="urn:jboss:module:1.9">
     <resources>
     	<!-- Insert resources here -->
     </resources>
 
     <dependencies>
+       <module name="java.logging"/>
+       <module name="java.management"/>
+       <module name="java.naming"/>
+       <module name="java.security.jgss"/>
         <module name="org.apache.cxf.ws-security" services="import">
           <imports>
             <include path="META-INF/cxf"/>
@@ -73,5 +73,7 @@
         <module name="org.codehaus.woodstox" />
         <module name="org.joda.time" />
         <module name="org.opensaml" />
+       <module name="java.xml"/>
+       <module name="java.xml.crypto"/>
     </dependencies>
 </module>

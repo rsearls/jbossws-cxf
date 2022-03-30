@@ -22,15 +22,4 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<module xmlns="urn:jboss:module:1.5" name="javax.xml.ws.api">
-    <dependencies>
-        <module name="javax.xml.bind.api" export="true"/>
-        <module name="javax.xml.soap.api" export="true"/>
-        <module name="javax.api"/>
-        <module name="org.jboss.modules"/>
-    </dependencies>
-
-    <resources>
-        <!-- Insert resources here -->
-    </resources>
-</module>
+<module-alias name="javax.xml.ws.api" target-name="jakarta.xml.ws.api" xmlns="urn:jboss:module:1.9"/>

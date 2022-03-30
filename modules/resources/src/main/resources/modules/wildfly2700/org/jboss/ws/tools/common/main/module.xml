@@ -22,7 +22,7 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<module xmlns="urn:jboss:module:1.9" name="org.jboss.ws.tools.common">
+<module name="org.jboss.ws.tools.common" xmlns="urn:jboss:module:1.9">
 
     <properties>
         <property name="jboss.api" value="private"/>
@@ -33,14 +33,15 @@
     </resources>
 
     <dependencies>
-        <module name="gnu.getopt"/>
-        <module name="org.apache.log4j"/>
-        <module name="org.jboss.as.webservices.server.integration" services="import">
+       <module name="gnu.getopt"/>
+       <module name="org.apache.log4j"/>
+       <module name="org.jboss.as.webservices.server.integration" services="import">
           <imports>
-            <include path="META-INF"/>
-            <include path="META-INF/cxf"/>
+             <include path="META-INF"/>
+             <include path="META-INF/cxf"/>
           </imports>
-        </module>
+       </module>
+
     </dependencies>
 
 </module>
