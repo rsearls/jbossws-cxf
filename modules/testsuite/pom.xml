@@ -758,6 +758,10 @@
 
                 <!-- https://issues.redhat.com/browse/JBWS-4261 -->
                 <exclude>org.jboss.jaxbintros related NoClassDefFoundError*</exclude>
+
+                <!-- https://issues.redhat.com/browse/JBWS-4262 -->
+                <exclude>org/jboss/test/ws/jaxws/cxf/management/CXFManagementTestCase</exclude>
+
               </excludes>
             </configuration>
           </plugin>
