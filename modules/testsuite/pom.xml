@@ -766,7 +766,11 @@
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/jaas/UsernameAuthorizationEJBTestCase*</exclude>
 
                 <!--https://issues.redhat.com/browse/JBWS-4264 -->
-                <exclude>org/jboss/test/ws/jaxws/cxf/jbws3648/PolicyAttachmentTestCase</exclude>
+                <exclude>org/jboss/test/ws/jaxws/cxf/jbws3648/PolicyAttachmentTestCase*</exclude>
+
+                <!-- https://issues.redhat.com/browse/JBWS-4265 -->
+                <exclude>org/jboss/test/ws/jaxws/cxf/jms/JMSEndpointAPITestCase*</exclude>
+                <exclude>org/jboss/test/ws/jaxws/cxf/jms/JMSEndpointOnlyDeploymentTestCase*</exclude>
 
               </excludes>
             </configuration>
