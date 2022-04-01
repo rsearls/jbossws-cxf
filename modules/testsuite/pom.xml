@@ -752,6 +752,9 @@
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/basic/MultipleClientsSignEncryptTestCase*</exclude>
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/oasis/WSSecurityPolicyExamples22xTestCase*</exclude>
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/secconv/SecureConversationTestCase*</exclude>
+
+                <!-- https://issues.redhat.com/browse/JBWS-4260  -->
+                <exclude>org/jboss/test/ws/jaxws/cxf/jbws3679/JBWS3679TestCase*</exclude>
               </excludes>
             </configuration>
           </plugin>
