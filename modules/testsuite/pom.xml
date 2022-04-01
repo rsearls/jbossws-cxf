@@ -744,6 +744,14 @@
                 <exclude>org/jboss/test/ws/jaxws/samples/wsrm/client/WSReliableMessagingWithAPITestCase*</exclude>
                 <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/basic/SignEncryptGCMTestCase*</exclude>
 
+                <!-- https://issues.redhat.com/browse/JBWS-4259 -->
+                <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/basic/SignTestCase*</exclude>
+                <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/basic/UsernameOverTransportTestCase*</exclude>
+                <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/oasis/WSSecurityPolicyExamples21xTestCase*</exclude>
+                <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/basic/AnnotatedSignEncryptTestCase*</exclude>
+                <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/basic/MultipleClientsSignEncryptTestCase*</exclude>
+                <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/oasis/WSSecurityPolicyExamples22xTestCase*</exclude>
+                <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/secconv/SecureConversationTestCase*</exclude>
               </excludes>
             </configuration>
           </plugin>
