@@ -735,6 +735,15 @@
                 <exclude>org/jboss/test/ws/jaxws/cxf/jbws3628/JBWS3628TestCase*</exclude>
                 <exclude>org/jboss/test/ws/jaxws/samples/provider/ProviderJAXBTestCase*</exclude>
                 <exclude>org/jboss/test/ws/jaxws/samples/httpbinding/HttpJAXBTestCase*</exclude>
+
+                <!-- https://issues.redhat.com/browse/JBWS-4258 -->
+                <exclude>org/jboss/test/ws/jaxws/cxf/clientConfig/CXFClientConfigurationTestCase*</exclude>
+                <exclude>org/jboss/test/ws/jaxws/cxf/fastinfoset/FastInfosetTestCase*</exclude>
+                <exclude>org/jboss/test/ws/jaxws/cxf/httpauth/HelloBasicSecTestCase*</exclude>
+                <exclude>org/jboss/test/ws/jaxws/samples/schemavalidation/SchemaValidationTestCase*</exclude>
+                <exclude>org/jboss/test/ws/jaxws/samples/wsrm/client/WSReliableMessagingWithAPITestCase*</exclude>
+                <exclude>org/jboss/test/ws/jaxws/samples/wsse/policy/basic/SignEncryptGCMTestCase*</exclude>
+
               </excludes>
             </configuration>
           </plugin>
