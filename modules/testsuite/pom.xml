@@ -755,6 +755,9 @@
 
                 <!-- https://issues.redhat.com/browse/JBWS-4260  -->
                 <exclude>org/jboss/test/ws/jaxws/cxf/jbws3679/JBWS3679TestCase*</exclude>
+
+                <!-- https://issues.redhat.com/browse/JBWS-4261 -->
+                <exclude>org.jboss.jaxbintros related NoClassDefFoundError*</exclude>
               </excludes>
             </configuration>
           </plugin>
