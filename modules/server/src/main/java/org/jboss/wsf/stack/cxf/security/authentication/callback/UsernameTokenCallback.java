@@ -27,8 +27,9 @@ import java.util.Map;
 
 import javax.security.auth.callback.Callback;
 
-import org.jboss.crypto.digest.DigestCallback;
-import org.jboss.security.auth.callback.MapCallback;
+import org.jboss.wsf.stack.cxf.security.authentication.callback.DigestCallback;
+// rls import org.jboss.security.auth.callback.MapCallback;
+import org.jboss.wsf.stack.cxf.security.authentication.callback.MapCallback;
 import java.util.Base64;
 
 /**

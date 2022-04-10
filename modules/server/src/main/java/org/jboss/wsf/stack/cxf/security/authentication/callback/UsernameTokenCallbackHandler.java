@@ -27,7 +27,8 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
-import org.jboss.security.auth.callback.MapCallback;
+//-- rls import org.jboss.security.auth.callback.MapCallback;
+import org.jboss.wsf.stack.cxf.security.authentication.callback.MapCallback;
 
 /**
  * A callback handler to be used to pass parameters to the
