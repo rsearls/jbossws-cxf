@@ -74,5 +74,7 @@
         <module name="org.bouncycastle.bcprov"/>
         <module name="org.jboss.modules"/>
         <module name="java.xml"/>
+       <module name="org.picketbox" /> <!--  rls added -->
+       <module name="javax.security.jacc.api" /> <!--  rls added -->
     </dependencies>
 </module>

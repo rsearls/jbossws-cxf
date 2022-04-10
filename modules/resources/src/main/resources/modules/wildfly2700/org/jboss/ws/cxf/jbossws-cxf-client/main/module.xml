@@ -45,5 +45,7 @@
         <module name="org.apache.ws.security" export="true"/>
 		<!-- Tools support on JDK 9 and later -->
 		<module name="org.jboss.modules"/>
+        <module name="org.picketbox" export="true"/> <!-- rls added -->
+        <module name="javax.security.jacc.api" /> <!--  rls added -->
     </dependencies>
 </module>

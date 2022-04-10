@@ -39,8 +39,8 @@ import javax.security.auth.callback.CallbackHandler;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.cxf.common.security.SimplePrincipal;
-//import org.jboss.security.auth.callback.CallbackHandlerPolicyContextHandler;
-import org.jboss.wsf.stack.cxf.security.authentication.callback.CallbackHandlerPolicyContextHandler;
+import org.jboss.security.auth.callback.CallbackHandlerPolicyContextHandler;
+//--rls import org.jboss.wsf.stack.cxf.security.authentication.callback.CallbackHandlerPolicyContextHandler;
 import org.jboss.security.plugins.JBossAuthenticationManager;
 import org.jboss.ws.common.utils.DelegateClassLoader;
 import org.jboss.wsf.spi.classloading.ClassLoaderProvider;
@@ -50,7 +50,6 @@ import org.jboss.wsf.stack.cxf.security.nonce.NonceStore;
 import org.wildfly.security.auth.server.RealmIdentity;
 import org.wildfly.security.auth.server.RealmUnavailableException;
 import org.wildfly.security.auth.server.SecurityDomain;
-import org.wildfly.security.authz.jacc.SecurityIdentityHandler;
 import org.wildfly.security.credential.PasswordCredential;
 import org.wildfly.security.password.interfaces.ClearPassword;
 

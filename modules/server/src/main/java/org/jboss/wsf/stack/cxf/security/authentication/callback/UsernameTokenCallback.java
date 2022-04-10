@@ -26,10 +26,10 @@ import java.security.MessageDigest;
 import java.util.Map;
 
 import javax.security.auth.callback.Callback;
-
-import org.jboss.wsf.stack.cxf.security.authentication.callback.DigestCallback;
-// rls import org.jboss.security.auth.callback.MapCallback;
-import org.jboss.wsf.stack.cxf.security.authentication.callback.MapCallback;
+import org.jboss.crypto.digest.DigestCallback;
+// rls import org.jboss.wsf.stack.cxf.security.authentication.callback.DigestCallback;
+import org.jboss.security.auth.callback.MapCallback;
+// rls import org.jboss.wsf.stack.cxf.security.authentication.callback.MapCallback;
 import java.util.Base64;
 
 /**
