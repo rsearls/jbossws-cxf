@@ -4,6 +4,26 @@ embed-server --std-out=echo --server-config=jbws-testsuite-default-config-tests.
 ## get CLI-testsuite-default.properties contents
 set usersPropFile=${usersPropFile}
 set rolesPropFile=${rolesPropFile}
+set serverLog=${serverLog}
+set serverLog=${serverLog}
+
+if (outcome == success) of :resolve-expression(expression=${enableServerLoggingToConsole-prop})
+  set enableServerLoggingToConsole=`:resolve-expression(expression=${enableServerLoggingToConsole-prop})`
+  ##echo $enableServerLoggingToConsole
+  echo redirect log output to $serverLog
+  ./subsystem=logging/root-logger=ROOT:remove-handler(name=CONSOLE)
+  ./subsystem=logging/periodic-rotating-file-handler=FILE \
+     :write-attribute(name=file, value={relative-to=jboss.server.log.dir, path=$serverLog})
+end-if
+
+if (outcome == success) of :resolve-expression(expression=${enableServerLoggingToConsole-prop})
+  set enableServerLoggingToConsole=`:resolve-expression(expression=${enableServerLoggingToConsole-prop})`
+  ##echo $enableServerLoggingToConsole
+  echo redirect log output to $serverLog
+  ./subsystem=logging/root-logger=ROOT:remove-handler(name=CONSOLE)
+  ./subsystem=logging/periodic-rotating-file-handler=FILE \
+     :write-attribute(name=file, value={relative-to=jboss.server.log.dir, path=$serverLog})
+end-if
 
 ##----- JBossWS domain config ---------
 # 1.

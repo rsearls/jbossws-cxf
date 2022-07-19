@@ -133,6 +133,7 @@
                                     <entry key="usersPropFile" value="${basedir}/src/test/resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-users.properties"/>
                                     <entry key="rolesPropFile" value="${basedir}/src/test/resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-roles.properties"/>
                                     <entry key="keystorePath" value="${basedir}/src/test/etc/test.keystore"/>
+                                    <entry key="serverLog" value="jbws-testsuite-default.log"/>
                                 </propertyfile>
 
                                 <copy overwrite="true"
@@ -141,6 +142,7 @@
                                 <propertyfile file="${project.build.directory}/jbws-testsuite-ssl-mutual-auth-elytron-CLI.properties">
                                       <entry key="keystorePath" value="${project.build.directory}/test-classes/test.keystore"/>
                                       <entry key="truststorePath" value="${project.build.directory}/test-classes/test.truststore"/>
+                                    <entry key="serverLog" value="jbws-testsuite-ssl-mutual-auth.log"/>
                                 </propertyfile>
 
                                 <copy overwrite="true"
@@ -149,13 +151,14 @@
                                 <propertyfile file="${project.build.directory}/jbws-testsuite-default-config-tests-elytron-CLI.properties">
                                     <entry key="usersPropFile" value="${basedir}/src/test/resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-users.properties"/>
                                     <entry key="rolesPropFile" value="${basedir}/src/test/resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-roles.properties"/>
+                                    <entry key="serverLog" value="jbws-testsuite-default-config-tests.log"/>
                                 </propertyfile>
 
                                 <copy overwrite="true"
                                       file="${jboss.home}/standalone/configuration/standalone-full.xml"
                                       tofile="${jboss.home}/standalone/configuration/jbws-testsuite-jms.xml" />
                                 <propertyfile file="${project.build.directory}/jbws-testsuite-jms-elytron-CLI.properties">
-                                    <entry key="comment" value="This file intentionally empty.  Future properties may be needed" />
+                                    <entry key="serverLog" value="jbws-testsuite-jms.log"/>
                                 </propertyfile>
                             </target>
                         </configuration>
@@ -189,6 +192,9 @@
                             <propertiesFiles>${project.build.directory}/jbws-testsuite-default-elytron-CLI.properties</propertiesFiles>
                             <jboss-home>${jboss.home}</jboss-home>
                             <stdout>target/jbws-testsuite-default-elytron-CLI.log</stdout>
+                            <system-properties>
+                                <enableServerLoggingToConsole-prop>${enableServerLoggingToConsole}</enableServerLoggingToConsole-prop>
+                            </system-properties>
                         </configuration>
                     </execution>
 
@@ -206,6 +212,9 @@
                             <propertiesFiles>${project.build.directory}/jbws-testsuite-ssl-mutual-auth-elytron-CLI.properties</propertiesFiles>
                             <jboss-home>${jboss.home}</jboss-home>
                             <stdout>target/jbws-testsuite-ssl-mutual-auth-elytron-CLI.log</stdout>
+                            <system-properties>
+                                <enableServerLoggingToConsole-prop>${enableServerLoggingToConsole}</enableServerLoggingToConsole-prop>
+                            </system-properties>
                         </configuration>
                     </execution>
 
@@ -223,6 +232,9 @@
                             <propertiesFiles>${project.build.directory}/jbws-testsuite-default-config-tests-elytron-CLI.properties</propertiesFiles>
                             <jboss-home>${jboss.home}</jboss-home>
                             <stdout>target/jbws-testsuite-default-config-tests-elytron-CLI.log</stdout>
+                            <system-properties>
+                                <enableServerLoggingToConsole-prop>${enableServerLoggingToConsole}</enableServerLoggingToConsole-prop>
+                            </system-properties>
                         </configuration>
                     </execution>
 
@@ -240,6 +252,9 @@
                             <propertiesFiles>${project.build.directory}/jbws-testsuite-jms-elytron-CLI.properties</propertiesFiles>
                             <jboss-home>${jboss.home}</jboss-home>
                             <stdout>target/jbws-testsuite-jms-elytron-CLI.log</stdout>
+                            <system-properties>
+                                <enableServerLoggingToConsole-prop>${enableServerLoggingToConsole}</enableServerLoggingToConsole-prop>
+                            </system-properties>
                         </configuration>
                     </execution>
                 </executions>

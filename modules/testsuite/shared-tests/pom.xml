@@ -91,6 +91,9 @@
                             <propertiesFiles>${project.build.directory}/jbws-testsuite-shared-default-elytron-CLI.properties</propertiesFiles>
                             <jboss-home>${jboss.home}</jboss-home>
                             <stdout>target/jbws-testsuite-shared-default-elytron-CLI.log</stdout>
+                            <system-properties>
+                                <enableServerLoggingToConsole-prop>${enableServerLoggingToConsole}</enableServerLoggingToConsole-prop>
+                            </system-properties>
                         </configuration>
                     </execution>
 
@@ -108,6 +111,9 @@
                             <propertiesFiles>${project.build.directory}/jbws-testsuite-shared-default-config-tests-elytron-CLI.properties</propertiesFiles>
                             <jboss-home>${jboss.home}</jboss-home>
                             <stdout>target/jbws-testsuite-shared-default-config-tests-elytron-CLI.log</stdout>
+                            <system-properties>
+                                <enableServerLoggingToConsole-prop>${enableServerLoggingToConsole}</enableServerLoggingToConsole-prop>
+                            </system-properties>
                         </configuration>
                     </execution>
 
@@ -125,6 +131,9 @@
                             <propertiesFiles>${project.build.directory}/jbws-testsuite-shared-address-rewrite-elytron-CLI.properties</propertiesFiles>
                             <jboss-home>${jboss.home}</jboss-home>
                             <stdout>target/jbws-testsuite-shared-address-rewrite-elytron-CLI.log</stdout>
+                            <system-properties>
+                                <enableServerLoggingToConsole-prop>${enableServerLoggingToConsole}</enableServerLoggingToConsole-prop>
+                            </system-properties>
                         </configuration>
                     </execution>
                 </executions>
@@ -185,6 +194,7 @@
                                 <entry key="usersPropFile" value="${basedir}/src/test/etc/jbossws-users.properties"/>
                                 <entry key="rolesPropFile" value="${basedir}/src/test/etc/jbossws-roles.properties"/>
                                 <entry key="keystorePath" value="${basedir}/src/test/etc/test.keystore"/>
+                                <entry key="serverLog" value="jbws-testsuite-shared-default.log"/>
                             </propertyfile>
 
                             <copy overwrite="true"
@@ -193,6 +203,7 @@
                             <propertyfile file="${project.build.directory}/jbws-testsuite-shared-default-config-tests-elytron-CLI.properties">
                                 <entry key="usersPropFile" value="${basedir}/src/test/etc/jbossws-users.properties"/>
                                 <entry key="rolesPropFile" value="${basedir}/src/test/etc/jbossws-roles.properties"/>
+                                <entry key="serverLog" value="jbws-testsuite-shared-default-config-tests.log"/>
                             </propertyfile>
 
                             <copy overwrite="true"
@@ -202,6 +213,7 @@
                                 <entry key="usersPropFile" value="${basedir}/src/test/etc/jbossws-users.properties"/>
                                 <entry key="rolesPropFile" value="${basedir}/src/test/etc/jbossws-roles.properties"/>
                                 <entry key="keystorePath" value="${basedir}/src/test/etc/test.keystore"/>
+                                <entry key="serverLog" value="jbws-testsuite-shared-address-rewrite.log"/>
                             </propertyfile>
                         </target>
                     </configuration>

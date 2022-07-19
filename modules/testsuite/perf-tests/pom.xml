@@ -97,7 +97,7 @@
             <executions>
               <execution>
                 <id>create-server-config</id>
-                <phase>initialize</phase>
+                <phase>generate-test-resources</phase>
                 <goals><goal>run</goal></goals>
                 <configuration>
                   <target>
@@ -126,7 +126,7 @@
             <executions>
               <execution>
                 <id>jbws-testsuite-shared-default config-server</id>
-                <phase>generate-sources</phase>
+                <phase>generate-test-resources</phase>
                 <goals>
                   <goal>execute-commands </goal>
                 </goals>
