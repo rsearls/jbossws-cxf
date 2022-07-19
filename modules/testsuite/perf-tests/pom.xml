@@ -91,33 +91,56 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.gmavenplus</groupId>
-            <artifactId>gmavenplus-plugin</artifactId>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>3.1.0</version>
             <executions>
               <execution>
-                <id>testsuite-perf</id>
-                <phase>pre-integration-test</phase>
+                <id>create-server-config</id>
+                <phase>initialize</phase>
+                <goals><goal>run</goal></goals>
+                <configuration>
+                  <target>
+                    <copy overwrite="true"
+                          file="${jboss.home}/standalone/configuration/standalone.xml"
+                          tofile="${jboss.home}/standalone/configuration/jbws-testsuite-perf.xml" />
+                    <propertyfile file="${project.build.directory}/perf-CLI.properties">
+                      <entry key="serverLog" value="jbws-testsuite-perf.log"/>
+                    </propertyfile>
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.wildfly.plugins</groupId>
+            <artifactId>wildfly-maven-plugin</artifactId>
+            <version>4.0.0.Alpha2</version>
+            <dependencies>
+              <dependency>
+                <groupId>org.wildfly.core</groupId>
+                <artifactId>wildfly-controller-client</artifactId>
+                <version>17.0.1.Final</version>
+              </dependency>
+            </dependencies>
+            <executions>
+              <execution>
+                <id>jbws-testsuite-shared-default config-server</id>
+                <phase>generate-sources</phase>
                 <goals>
-                  <goal>execute</goal>
+                  <goal>execute-commands </goal>
                 </goals>
                 <configuration>
+                  <offline>true</offline>
                   <scripts>
-                    <script>file:///${basedir}/src/test/scripts/perf.groovy</script>
+                    <script>${basedir}/src/test/cli/perf.cli</script>
                   </scripts>
-                  <properties>
-                    <property>
-                      <name>inputFile</name>
-                      <value>${jboss.home}/standalone/configuration/standalone.xml</value>
-                    </property>
-                    <property>
-                      <name>outputFile</name>
-                      <value>${jboss.home}/standalone/configuration/jbws-testsuite-perf.xml</value>
-                    </property>
-                    <property>
-                      <name>serverLog</name>
-                      <value>jbws-testsuite-perf.log</value>
-                    </property>
-                  </properties>
+                  <propertiesFiles>${project.build.directory}/perf-CLI.properties</propertiesFiles>
+                  <jboss-home>${jboss.home}</jboss-home>
+                  <stdout>target/perf-CLI.log</stdout>
+                  <system-properties>
+                    <enableServerLoggingToConsole-prop>${enableServerLoggingToConsole}</enableServerLoggingToConsole-prop>
+                  </system-properties>
                 </configuration>
               </execution>
             </executions>
