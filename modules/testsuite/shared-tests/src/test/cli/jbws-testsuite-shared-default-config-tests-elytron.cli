@@ -1,0 +1,28 @@
+
+embed-server --std-out=echo --server-config=jbws-testsuite-shared-default-config-tests.xml
+
+## jbws-testsuite-default-elytron-CLI.properties contents
+set usersPropFile=${usersPropFile}
+set rolesPropFile=${rolesPropFile}
+
+##----- JBossWS domain config ---------
+echo JBossWS domain config
+# 1.
+./subsystem=elytron/properties-realm=JBossWS \
+   :add(users-properties={path=$usersPropFile, plain-text=true}, \
+   groups-properties={path=$rolesPropFile})
+# 2.
+./subsystem=elytron/security-domain=JBossWS \
+   :add(default-realm=JBossWS, permission-mapper=default-permission-mapper, \
+   realms=[{realm=JBossWS,role-decoder=groups-to-roles}])
+# 3.
+./subsystem=elytron/http-authentication-factory=JBossWS \
+   :add(security-domain=JBossWS, http-server-mechanism-factory=global, \
+   mechanism-configurations=[{mechanism-name=BASIC, \
+   mechanism-realm-configurations=[{realm-name=JBossWS}] }])
+# 4.
+./subsystem=undertow/application-security-domain=JBossWS \
+   :add(http-authentication-factory=JBossWS)
+
+
+stop-embedded-server
