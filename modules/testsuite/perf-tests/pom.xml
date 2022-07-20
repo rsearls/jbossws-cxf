@@ -17,6 +17,9 @@
     <jmeter.version>2.13</jmeter.version>
     <jmeter.graph.plugin.version>0.1.0</jmeter.graph.plugin.version>
     <jmeter.plugin.version>1.10.1</jmeter.plugin.version>
+
+    <!-- base name of related server config files -->
+    <jbws-testsuite-perf-base>jbws-testsuite-perf</jbws-testsuite-perf-base>
   </properties>
   
   <dependencies>
@@ -103,9 +106,9 @@
                   <target>
                     <copy overwrite="true"
                           file="${jboss.home}/standalone/configuration/standalone.xml"
-                          tofile="${jboss.home}/standalone/configuration/jbws-testsuite-perf.xml" />
-                    <propertyfile file="${project.build.directory}/perf-CLI.properties">
-                      <entry key="serverLog" value="jbws-testsuite-perf.log"/>
+                          tofile="${jboss.home}/standalone/configuration/${jbws-testsuite-perf-base}.xml" />
+                    <propertyfile file="${project.build.directory}/${jbws-testsuite-perf-base}-CLI.properties">
+                      <entry key="serverLog" value="${jbws-testsuite-perf-base}.log"/>
                     </propertyfile>
                   </target>
                 </configuration>
@@ -135,9 +138,9 @@
                   <scripts>
                     <script>${basedir}/src/test/cli/perf.cli</script>
                   </scripts>
-                  <propertiesFiles>${project.build.directory}/perf-CLI.properties</propertiesFiles>
+                  <propertiesFiles>${project.build.directory}/${jbws-testsuite-perf-base}-CLI.properties</propertiesFiles>
                   <jboss-home>${jboss.home}</jboss-home>
-                  <stdout>target/perf-CLI.log</stdout>
+                  <stdout>target/${jbws-testsuite-perf-base}-CLI.log</stdout>
                   <system-properties>
                     <enableServerLoggingToConsole-prop>${enableServerLoggingToConsole}</enableServerLoggingToConsole-prop>
                   </system-properties>
@@ -275,7 +278,7 @@
                   <!-- TODO revisit the values here... -->
 <!--                  <jvmArgs>-server -agentpath:/home/alessio/jprofiler7/bin/linux-x64/libjprofilerti.so=offline,id=106 -Xms64m -Xmx512m -Djboss.socket.binding.port-offset=${port-offset.perf-tests.jboss} ${additionalJvmArgs}</jvmArgs> -->
                   <jvmArgs>-server -Xms64m -Xmx512m -Djboss.socket.binding.port-offset=${port-offset.perf-tests.jboss} ${additionalJvmArgs}</jvmArgs>
-                  <serverConfig>jbws-testsuite-perf.xml</serverConfig>
+                  <serverConfig>${jbws-testsuite-perf-base}.xml</serverConfig>
                   <jbossHome>${jboss.home}</jbossHome>
                   <!-- TODO: add serverArgs section to use a custom bind address (requires wildfly-maven-plugin 1.1.0 +)
                        https://github.com/wildfly/wildfly-maven-plugin/commit/160b1a29f4e26fff9f60b7cb4c8e3c1b055c7300 -->

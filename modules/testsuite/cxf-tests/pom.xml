@@ -17,6 +17,11 @@
     <!-- This is used for test archives embedding Spring -->
     <test.spring.version>5.1.5.RELEASE</test.spring.version>
     <test.cxf.version>${cxf.version}</test.cxf.version>
+
+      <!-- base name of related server config files -->
+      <jbws-testsuite-jms-base>jbws-testsuite-jms</jbws-testsuite-jms-base>
+      <jbws-testsuite-default-base>jbws-testsuite-default</jbws-testsuite-default-base>
+      <jbws-testsuite-default-config-tests-base>jbws-testsuite-default-config-tests</jbws-testsuite-default-config-tests-base>
   </properties>
   
   <dependencies>
@@ -127,13 +132,13 @@
                             <target>
                                 <copy overwrite="true"
                                       file="${jboss.home}/standalone/configuration/standalone.xml"
-                                      tofile="${jboss.home}/standalone/configuration/jbws-testsuite-default.xml" />
-                                <propertyfile file="${project.build.directory}/jbws-testsuite-default-elytron-CLI.properties">
+                                      tofile="${jboss.home}/standalone/configuration/${jbws-testsuite-default-base}.xml" />
+                                <propertyfile file="${project.build.directory}/${jbws-testsuite-default-base}-elytron-CLI.properties">
                                     <entry key="testResourcesDir" value="${basedir}/src/test/resources"/>
                                     <entry key="usersPropFile" value="${basedir}/src/test/resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-users.properties"/>
                                     <entry key="rolesPropFile" value="${basedir}/src/test/resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-roles.properties"/>
                                     <entry key="keystorePath" value="${basedir}/src/test/etc/test.keystore"/>
-                                    <entry key="serverLog" value="jbws-testsuite-default.log"/>
+                                    <entry key="serverLog" value="${jbws-testsuite-default-base}.log"/>
                                 </propertyfile>
 
                                 <copy overwrite="true"
@@ -147,18 +152,18 @@
 
                                 <copy overwrite="true"
                                       file="${jboss.home}/standalone/configuration/standalone.xml"
-                                      tofile="${jboss.home}/standalone/configuration/jbws-testsuite-default-config-tests.xml" />
-                                <propertyfile file="${project.build.directory}/jbws-testsuite-default-config-tests-elytron-CLI.properties">
+                                      tofile="${jboss.home}/standalone/configuration/${jbws-testsuite-default-config-tests-base}.xml" />
+                                <propertyfile file="${project.build.directory}/${jbws-testsuite-default-config-tests-base}-elytron-CLI.properties">
                                     <entry key="usersPropFile" value="${basedir}/src/test/resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-users.properties"/>
                                     <entry key="rolesPropFile" value="${basedir}/src/test/resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-roles.properties"/>
-                                    <entry key="serverLog" value="jbws-testsuite-default-config-tests.log"/>
+                                    <entry key="serverLog" value="${jbws-testsuite-default-config-tests-base}.log"/>
                                 </propertyfile>
 
                                 <copy overwrite="true"
                                       file="${jboss.home}/standalone/configuration/standalone-full.xml"
-                                      tofile="${jboss.home}/standalone/configuration/jbws-testsuite-jms.xml" />
-                                <propertyfile file="${project.build.directory}/jbws-testsuite-jms-elytron-CLI.properties">
-                                    <entry key="serverLog" value="jbws-testsuite-jms.log"/>
+                                      tofile="${jboss.home}/standalone/configuration/${jbws-testsuite-jms-base}.xml" />
+                                <propertyfile file="${project.build.directory}/${jbws-testsuite-jms-base}-elytron-CLI.properties">
+                                    <entry key="serverLog" value="${jbws-testsuite-jms-base}.log"/>
                                 </propertyfile>
                             </target>
                         </configuration>
@@ -187,11 +192,11 @@
                         <configuration>
                             <offline>true</offline>
                             <scripts>
-                                <script>${basedir}/src/test/cli/jbws-testsuite-default-elytron.cli</script>
+                                <script>${basedir}/src/test/cli/${jbws-testsuite-default-base}-elytron.cli</script>
                             </scripts>
-                            <propertiesFiles>${project.build.directory}/jbws-testsuite-default-elytron-CLI.properties</propertiesFiles>
+                            <propertiesFiles>${project.build.directory}/${jbws-testsuite-default-base}-elytron-CLI.properties</propertiesFiles>
                             <jboss-home>${jboss.home}</jboss-home>
-                            <stdout>target/jbws-testsuite-default-elytron-CLI.log</stdout>
+                            <stdout>${project.build.directory}/${jbws-testsuite-default-base}-elytron-CLI.log</stdout>
                             <system-properties>
                                 <enableServerLoggingToConsole-prop>${enableServerLoggingToConsole}</enableServerLoggingToConsole-prop>
                             </system-properties>
@@ -211,7 +216,7 @@
                             </scripts>
                             <propertiesFiles>${project.build.directory}/jbws-testsuite-ssl-mutual-auth-elytron-CLI.properties</propertiesFiles>
                             <jboss-home>${jboss.home}</jboss-home>
-                            <stdout>target/jbws-testsuite-ssl-mutual-auth-elytron-CLI.log</stdout>
+                            <stdout>${project.build.directory}/jbws-testsuite-ssl-mutual-auth-elytron-CLI.log</stdout>
                             <system-properties>
                                 <enableServerLoggingToConsole-prop>${enableServerLoggingToConsole}</enableServerLoggingToConsole-prop>
                             </system-properties>
@@ -227,11 +232,11 @@
                         <configuration>
                             <offline>true</offline>
                             <scripts>
-                                <script>${basedir}/src/test/cli/jbws-testsuite-default-config-tests-elytron.cli</script>
+                                <script>${basedir}/src/test/cli/${jbws-testsuite-default-config-tests-base}-elytron.cli</script>
                             </scripts>
-                            <propertiesFiles>${project.build.directory}/jbws-testsuite-default-config-tests-elytron-CLI.properties</propertiesFiles>
+                            <propertiesFiles>${project.build.directory}/${jbws-testsuite-default-config-tests-base}-elytron-CLI.properties</propertiesFiles>
                             <jboss-home>${jboss.home}</jboss-home>
-                            <stdout>target/jbws-testsuite-default-config-tests-elytron-CLI.log</stdout>
+                            <stdout>${project.build.directory}/${jbws-testsuite-default-config-tests-base}-elytron-CLI.log</stdout>
                             <system-properties>
                                 <enableServerLoggingToConsole-prop>${enableServerLoggingToConsole}</enableServerLoggingToConsole-prop>
                             </system-properties>
@@ -247,11 +252,11 @@
                         <configuration>
                             <offline>true</offline>
                             <scripts>
-                                <script>${basedir}/src/test/cli/jbws-testsuite-jms-elytron.cli</script>
+                                <script>${basedir}/src/test/cli/${jbws-testsuite-jms-base}-elytron.cli</script>
                             </scripts>
-                            <propertiesFiles>${project.build.directory}/jbws-testsuite-jms-elytron-CLI.properties</propertiesFiles>
+                            <propertiesFiles>${project.build.directory}/${jbws-testsuite-jms-base}-elytron-CLI.properties</propertiesFiles>
                             <jboss-home>${jboss.home}</jboss-home>
-                            <stdout>target/jbws-testsuite-jms-elytron-CLI.log</stdout>
+                            <stdout>${project.build.directory}/${jbws-testsuite-jms-base}-elytron-CLI.log</stdout>
                             <system-properties>
                                 <enableServerLoggingToConsole-prop>${enableServerLoggingToConsole}</enableServerLoggingToConsole-prop>
                             </system-properties>
@@ -381,7 +386,7 @@
 	            </goals>
 	            <configuration>
 	              <jvmArgs>-server -Xms64m -Xmx512m -Djboss.socket.binding.port-offset=${port-offset.cxf-tests.jboss} ${additionalJvmArgs}</jvmArgs>
-	              <serverConfig>jbws-testsuite-default.xml</serverConfig>
+	              <serverConfig>${jbws-testsuite-default-base}.xml</serverConfig>
 	              <jbossHome>${jboss.home}</jbossHome>
                   <!-- TODO: add serverArgs section to use a custom bind address (requires wildfly-maven-plugin 1.1.0 +)
                        https://github.com/wildfly/wildfly-maven-plugin/commit/160b1a29f4e26fff9f60b7cb4c8e3c1b055c7300 -->
@@ -431,7 +436,7 @@
 	            </goals>
 	            <configuration>
 	              <jvmArgs>-server -Xms48m -Xmx384m -Djboss.socket.binding.port-offset=${port-offset.cxf-tests.default-config-tests} ${additionalJvmArgs}</jvmArgs>
-	              <serverConfig>jbws-testsuite-default-config-tests.xml</serverConfig>
+	              <serverConfig>${jbws-testsuite-default-config-tests-base}.xml</serverConfig>
 	              <jbossHome>${jboss.home}</jbossHome>
                   <!-- TODO: add serverArgs section to use a custom bind address (requires wildfly-maven-plugin 1.1.0 +)
                        https://github.com/wildfly/wildfly-maven-plugin/commit/160b1a29f4e26fff9f60b7cb4c8e3c1b055c7300 -->
@@ -456,7 +461,7 @@
 	            </goals>
 	            <configuration>
 	              <jvmArgs>-server -Xms48m -Xmx384m -Djboss.socket.binding.port-offset=${port-offset.cxf-tests.jms} ${additionalJvmArgs}</jvmArgs>
-	              <serverConfig>jbws-testsuite-jms.xml</serverConfig>
+	              <serverConfig>${jbws-testsuite-jms-base}.xml</serverConfig>
 	              <jbossHome>${jboss.home}</jbossHome>
                   <!-- TODO: add serverArgs section to use a custom bind address (requires wildfly-maven-plugin 1.1.0 +)
                        https://github.com/wildfly/wildfly-maven-plugin/commit/160b1a29f4e26fff9f60b7cb4c8e3c1b055c7300 -->
