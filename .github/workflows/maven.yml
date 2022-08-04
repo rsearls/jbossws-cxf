@@ -48,7 +48,7 @@ jobs:
           mvn -s ./.m2-settings.xml -fae -P${{ matrix.wildfly-version }} -Ptestsuite clean install
       - name: debug file contents
         if: ${{ always() }}
-        run: cat ./target/jbws-testsuite-default-elytron-CLI.properties
+        run: cat ./modules/testsuite/cxf-tests/target/jbws-testsuite-default-elytron-CLI.properties
       - name: Publish Test Report
         if: ${{ always() }}
         uses: scacap/action-surefire-report@v1
