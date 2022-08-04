@@ -217,7 +217,7 @@
                                         <propertyregex property="value-testResourcesDir"
                                                        input="${unix-testResourcesDir}"
                                                        regexp="\\"
-                                                       replace="\\\"
+                                                       replace="\\\\\\\\"
                                                        global="true" />
 
                                         <propertyregex property="unix-usersPropFile"
@@ -228,7 +228,7 @@
                                         <propertyregex property="value-usersPropFile"
                                                        input="${unix-usersPropFile}"
                                                        regexp="\\"
-                                                       replace="\\\"
+                                                       replace="\\\\\\\\"
                                                        global="true" />
 
                                         <propertyregex property="unix-rolesPropFile"
@@ -239,7 +239,7 @@
                                         <propertyregex property="value-rolesPropFile"
                                                        input="${unix-rolesPropFile}"
                                                        regexp="\\"
-                                                       replace="\\\"
+                                                       replace="\\\\\\\\"
                                                        global="true" />
 
                                         <propertyregex property="unix-keystorePath"
@@ -250,7 +250,7 @@
                                         <propertyregex property="value-keystorePath"
                                                        input="${unix-keystorePath}"
                                                        regexp="\\"
-                                                       replace="\\\"
+                                                       replace="\\\\\\\\"
                                                        global="true" />
 
                                         <propertyregex property="unix-truststorePath"
@@ -261,7 +261,7 @@
                                         <propertyregex property="value-truststorePath"
                                                        input="${unix-truststorePath}"
                                                        regexp="\\"
-                                                       replace="\\\"
+                                                       replace="\\\\\\\\"
                                                        global="true" />
                                         <!-- ################# rls ########## -->
                                         <propertyregex property="wfly-config-dir"
@@ -279,7 +279,7 @@
                                         <propertyregex property="value-jbws-app-props"
                                                        input="${unix-jbws-app-props}"
                                                        regexp="\\"
-                                                       replace="\\\"
+                                                       replace="\\\\\\\\"
                                                        global="true" />
 
                                         <!-- ################# rls  ########## -->
@@ -291,7 +291,7 @@
                                         <propertyregex property="value-project.build.directory"
                                                        input="${unix-project.build.directory}"
                                                        regexp="\\"
-                                                       replace="\\\"
+                                                       replace="\\\\\\\\"
                                                        global="true" />
 
 
