@@ -46,8 +46,9 @@ jobs:
       - name: Build with Maven Java ${{ matrix.java }} on WildFly ${{ matrix.wildfly-version }}
         run: |
           mvn -s ./.m2-settings.xml -fae -P${{ matrix.wildfly-version }} -Ptestsuite clean install
-      - name: debug show file contents
-          run: type modules/testsuite/cxf-tests/target/jbws-testsuite-default-elytron-CLI.properties
+      - name: debug file contents
+        if: ${{ always() }}
+        run: cat ./target/jbws-testsuite-default-elytron-CLI.properties
       - name: Publish Test Report
         if: ${{ always() }}
         uses: scacap/action-surefire-report@v1

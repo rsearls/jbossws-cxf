@@ -209,33 +209,92 @@
                                     <equals arg1="${isWin}" arg2="true" />
                                     <then>
                                         <echo message="Windows found" />
-                                        <echo message="Before: ${project.build.directory}/test-resources" />
-                                        <propertyregex property="value-testResourcesDir"
+                                        <propertyregex property="unix-testResourcesDir"
                                                        input="${project.build.directory}/test-resources"
+                                                       regexp="/"
+                                                       replace="\\\\"
+                                                       global="true" />
+                                        <propertyregex property="value-testResourcesDir"
+                                                       input="${unix-testResourcesDir}"
                                                        regexp="\\"
                                                        replace="\\\"
                                                        global="true" />
-                                        <echo message="After: ${value-testResourcesDir}" />
-                                        <propertyregex property="value-usersPropFile"
+
+                                        <propertyregex property="unix-usersPropFile"
                                                        input="${basedir}/src/test/resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-users.properties"
+                                                       regexp="/"
+                                                       replace="\\\\"
+                                                       global="true" />
+                                        <propertyregex property="value-usersPropFile"
+                                                       input="${unix-usersPropFile}"
                                                        regexp="\\"
                                                        replace="\\\"
+                                                       global="true" />
+
+                                        <propertyregex property="unix-rolesPropFile"
+                                                       input="${basedir}/src/test/resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-roles.properties"
+                                                       regexp="/"
+                                                       replace="\\\\"
                                                        global="true" />
                                         <propertyregex property="value-rolesPropFile"
-                                                       input="${basedir}/src/test/resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-roles.properties"
+                                                       input="${unix-rolesPropFile}"
                                                        regexp="\\"
                                                        replace="\\\"
+                                                       global="true" />
+
+                                        <propertyregex property="unix-keystorePath"
+                                                       input="${basedir}/src/test/etc/test.keystore"
+                                                       regexp="/"
+                                                       replace="\\\\"
                                                        global="true" />
                                         <propertyregex property="value-keystorePath"
-                                                       input="${basedir}/src/test/etc/test.keystore"
+                                                       input="${unix-keystorePath}"
                                                        regexp="\\"
                                                        replace="\\\"
+                                                       global="true" />
+
+                                        <propertyregex property="unix-truststorePath"
+                                                       input="${basedir}/src/test/etc/test.truststore"
+                                                       regexp="/"
+                                                       replace="\\\\"
                                                        global="true" />
                                         <propertyregex property="value-truststorePath"
-                                                       input="${basedir}/src/test/etc/test.truststore"
+                                                       input="${unix-truststorePath}"
                                                        regexp="\\"
                                                        replace="\\\"
                                                        global="true" />
+                                        <!-- ################# rls
+                                        <propertyregex property="wfly-config-dir"
+                                                       input="/standalone/configuration/"
+                                                       regexp="/"
+                                                       replace="\\\\"
+                                                       global="true" />
+                                        ########## -->
+                                        <!-- ################# rls
+                                        <propertyregex property="unix-jbws-app-props"
+                                                       input="${basedir}/src/test/etc/"
+                                                       regexp="/"
+                                                       replace="\\\\"
+                                                       global="true" />
+                                        <propertyregex property="value-jbws-app-props"
+                                                       input="${unix-jbws-app-props}"
+                                                       regexp="\\"
+                                                       replace="\\\"
+                                                       global="true" />
+                                        ########## -->
+                                        <!-- ################# rls
+                                        <propertyregex property="unix-project.build.directory"
+                                                       input="${project.build.directory}/"
+                                                       regexp="/"
+                                                       replace="\\\\"
+                                                       global="true" />
+                                        <propertyregex property="value-project.build.directory"
+                                                       input="${unix-project.build.directory}"
+                                                       regexp="\\"
+                                                       replace="\\\"
+                                                       global="true" />
+                                        ########## -->
+
                                     </then>
                                     <else>
                                         <echo message="Unix found" />
@@ -244,12 +303,18 @@
                                         <property name="value-rolesPropFile" value="${basedir}/src/test/resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-roles.properties"/>
                                         <property name="value-keystorePath" value="${basedir}/src/test/etc/test.keystore"/>
                                         <property name="value-truststorePath" value="${project.build.directory}/test-classes/test.truststore"/>
+
+                                        <!-- ### <property name="wfly-config-dir" value="/standalone/configuration/"/> rls ### -->
+                                        <!-- ### <property name="value-jbws-app-props" value="${basedir}/src/test/etc/"/>  rls ### -->
+                                        <!-- ### <property name="value-project.build.directory" value="${project.build.directory}/"/> rls ### -->
                                     </else>
                                 </if>
+
 
                                 <copy overwrite="true"
                                       file="${jboss.home}/standalone/configuration/standalone.xml"
                                       tofile="${jboss.home}/standalone/configuration/${jbws-testsuite-default-base}.xml" />
+
                                 <propertyfile file="${project.build.directory}/${jbws-testsuite-default-base}-elytron-CLI.properties">
                                     <entry key="testResourcesDir" value="${value-testResourcesDir}"/>
                                     <entry key="usersPropFile" value="${value-usersPropFile}"/>
@@ -261,6 +326,7 @@
                                 <copy overwrite="true"
                                       file="${jboss.home}/standalone/configuration/standalone.xml"
                                       tofile="${jboss.home}/standalone/configuration/jbws-testsuite-ssl-mutual-auth.xml" />
+
                                 <propertyfile file="${project.build.directory}/jbws-testsuite-ssl-mutual-auth-elytron-CLI.properties">
                                     <entry key="keystorePath" value="${value-keystorePath}"/>
                                     <entry key="truststorePath" value="${value-truststorePath}"/>
@@ -270,6 +336,7 @@
                                 <copy overwrite="true"
                                       file="${jboss.home}/standalone/configuration/standalone.xml"
                                       tofile="${jboss.home}/standalone/configuration/${jbws-testsuite-default-config-tests-base}.xml" />
+
                                 <propertyfile file="${project.build.directory}/${jbws-testsuite-default-config-tests-base}-elytron-CLI.properties">
                                     <entry key="usersPropFile" value="${value-usersPropFile}"/>
                                     <entry key="rolesPropFile" value="${value-rolesPropFile}"/>
@@ -282,11 +349,13 @@
                                 <propertyfile file="${project.build.directory}/${jbws-testsuite-jms-base}-elytron-CLI.properties">
                                     <entry key="serverLog" value="${jbws-testsuite-jms-base}.log"/>
                                 </propertyfile>
+
+
                                 <copy overwrite="true"
                                       file="${basedir}/src/test/etc/jbws-application-users.properties"
                                       tofile="${jboss.home}/standalone/configuration/jbws-application-users.properties" />
                                <copy overwrite="true"
-                                      file="${basedir}/src/test/etc/jbws-application-roles.properties"
+                                      file="$${basedir}/src/test/etc/jbws-application-roles.properties"
                                       tofile="${jboss.home}/standalone/configuration/jbws-application-roles.properties" />
                             </target>
                         </configuration>
