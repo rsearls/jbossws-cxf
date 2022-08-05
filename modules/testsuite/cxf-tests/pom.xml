@@ -215,9 +215,9 @@
                                                        replace="\\\\"
                                                        global="true" />
                                         <propertyregex property="value-testResourcesDir"
-                                                       input="${unix-testResourcesDir}"
+                                                       input="${project.build.directory}/test-resources"
                                                        regexp="\\"
-                                                       replace="\\\\\\\\"
+                                                       replace="/"
                                                        global="true" />
 
                                         <propertyregex property="unix-usersPropFile"
@@ -226,9 +226,9 @@
                                                        replace="\\\\"
                                                        global="true" />
                                         <propertyregex property="value-usersPropFile"
-                                                       input="${unix-usersPropFile}"
+                                                       input="${basedir}/src/test/resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-users.properties"
                                                        regexp="\\"
-                                                       replace="\\\\\\\\"
+                                                       replace="/"
                                                        global="true" />
 
                                         <propertyregex property="unix-rolesPropFile"
@@ -237,9 +237,9 @@
                                                        replace="\\\\"
                                                        global="true" />
                                         <propertyregex property="value-rolesPropFile"
-                                                       input="${unix-rolesPropFile}"
+                                                       input="${basedir}/src/test/resources/jaxws/samples/wsse/policy/jaas/digest/WEB-INF/jbossws-roles.properties"
                                                        regexp="\\"
-                                                       replace="\\\\\\\\"
+                                                       replace="/"
                                                        global="true" />
 
                                         <propertyregex property="unix-keystorePath"
@@ -248,9 +248,9 @@
                                                        replace="\\\\"
                                                        global="true" />
                                         <propertyregex property="value-keystorePath"
-                                                       input="${unix-keystorePath}"
+                                                       input="${basedir}/src/test/etc/test.keystore"
                                                        regexp="\\"
-                                                       replace="\\\\\\\\"
+                                                       replace="/"
                                                        global="true" />
 
                                         <propertyregex property="unix-truststorePath"
@@ -259,9 +259,9 @@
                                                        replace="\\\\"
                                                        global="true" />
                                         <propertyregex property="value-truststorePath"
-                                                       input="${unix-truststorePath}"
+                                                       input="${basedir}/src/test/etc/test.truststore"
                                                        regexp="\\"
-                                                       replace="\\\\\\\\"
+                                                       replace="/"
                                                        global="true" />
                                         <!-- ################# rls ########## -->
                                         <propertyregex property="wfly-config-dir"
@@ -277,9 +277,9 @@
                                                        replace="\\\\"
                                                        global="true" />
                                         <propertyregex property="value-jbws-app-props"
-                                                       input="${unix-jbws-app-props}"
+                                                       input="${basedir}/src/test/etc/"
                                                        regexp="\\"
-                                                       replace="\\\"
+                                                       replace="/"
                                                        global="true" />
 
                                         <!-- ################# rls  ########## ???-->
