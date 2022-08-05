@@ -135,25 +135,37 @@
                                     <propertyregex property="value-testResourcesDir"
                                                    input="${basedir}/src/test/resources"
                                                    regexp="\\"
-                                                   replace="\\\"
+                                                   replace="/"
                                                    global="true" />
                                     <propertyregex property="value-usersPropFile"
                                                    input="${basedir}/src/test/etc/jbossws-users.properties"
                                                    regexp="\\"
-                                                   replace="\\\"
+                                                   replace="/"
                                                    global="true" />
                                     <propertyregex property="value-rolesPropFile"
                                                    input="${basedir}/src/test/etc/jbossws-roles.properties"
                                                    regexp="\\"
-                                                   replace="\\\"
+                                                   replace="/"
                                                    global="true" />
                                     <propertyregex property="value-keystorePath"
                                                    input="${basedir}/src/test/etc/test.keystore"
                                                    regexp="\\"
-                                                   replace="\\\"
+                                                   replace="/"
                                                    global="true" />
                                     <propertyregex property="value-truststorePath"
                                                    input="${basedir}/src/test/etc/test.truststore"
+                                                   regexp="\\"
+                                                   replace="/"
+                                                   global="true" />
+
+                                    <propertyregex property="wfly-config-dir"
+                                                   input="/standalone/configuration/"
+                                                   regexp="/"
+                                                   replace="\\\\"
+                                                   global="true" />
+
+                                    <propertyregex property="value-project.build.directory"
+                                                   input="${project.build.directory}\"
                                                    regexp="\\"
                                                    replace="\\\"
                                                    global="true" />
@@ -164,13 +176,16 @@
                                     <property name="value-usersPropFile" value="${basedir}/src/test/etc/jbossws-users.properties"/>
                                     <property name="value-rolesPropFile" value="${basedir}/src/test/etc/jbossws-roles.properties"/>
                                     <property name="value-keystorePath" value="${basedir}/src/test/etc/test.keystore"/>
+
+                                    <property name="wfly-config-dir" value="/standalone/configuration/"/>
+                                    <property name="value-project.build.directory" value="${project.build.directory}/"/>
                                 </else>
                             </if>
 
                             <copy overwrite="true"
-                                  file="${jboss.home}/standalone/configuration/standalone.xml"
-                                  tofile="${jboss.home}/standalone/configuration/${jbws-testsuite-shared-default-base}.xml" />
-                            <propertyfile file="${project.build.directory}/${jbws-testsuite-shared-default-base}-elytron-CLI.properties">
+                                  file="${jboss.home}${wfly-config-dir}standalone.xml"
+                                  tofile="${jboss.home}${wfly-config-dir}${jbws-testsuite-shared-default-base}.xml" />
+                            <propertyfile file="${value-project.build.directory}${jbws-testsuite-shared-default-base}-elytron-CLI.properties">
                                 <entry key="testResourcesDir" value="${value-testResourcesDir}"/>
                                 <entry key="usersPropFile" value="${value-usersPropFile}"/>
                                 <entry key="rolesPropFile" value="${value-rolesPropFile}"/>
@@ -179,18 +194,18 @@
                             </propertyfile>
 
                             <copy overwrite="true"
-                                  file="${jboss.home}/standalone/configuration/standalone.xml"
-                                  tofile="${jboss.home}/standalone/configuration/${jbws-testsuite-shared-default-config-tests-base}.xml" />
-                            <propertyfile file="${project.build.directory}/${jbws-testsuite-shared-default-config-tests-base}-elytron-CLI.properties">
+                                  file="${jboss.home}${wfly-config-dir}standalone.xml"
+                                  tofile="${jboss.home}${wfly-config-dir}${jbws-testsuite-shared-default-config-tests-base}.xml" />
+                            <propertyfile file="${value-project.build.directory}${jbws-testsuite-shared-default-config-tests-base}-elytron-CLI.properties">
                                 <entry key="usersPropFile" value="${value-usersPropFile}"/>
                                 <entry key="rolesPropFile" value="${value-rolesPropFile}"/>
                                 <entry key="serverLog" value="${jbws-testsuite-shared-default-config-tests-base}.log"/>
                             </propertyfile>
 
                             <copy overwrite="true"
-                                  file="${jboss.home}/standalone/configuration/standalone.xml"
-                                  tofile="${jboss.home}/standalone/configuration/${jbws-testsuite-shared-address-rewrite-base}.xml" />
-                            <propertyfile file="${project.build.directory}/${jbws-testsuite-shared-address-rewrite-base}-elytron-CLI.properties">
+                                  file="${jboss.home}${wfly-config-dir}standalone.xml"
+                                  tofile="${jboss.home}${wfly-config-dir}${jbws-testsuite-shared-address-rewrite-base}.xml" />
+                            <propertyfile file="${value-project.build.directory}${jbws-testsuite-shared-address-rewrite-base}-elytron-CLI.properties">
                                 <entry key="usersPropFile" value="${value-usersPropFile}"/>
                                 <entry key="rolesPropFile" value="${value-rolesPropFile}"/>
                                 <entry key="keystorePath" value="${value-keystorePath}"/>
