@@ -270,7 +270,7 @@
                                                        replace="\\\\"
                                                        global="true" />
 
-                                        <!-- ################# rls ########## -->
+                                        <!-- ################# rls ########## ??? -->
                                         <propertyregex property="unix-jbws-app-props"
                                                        input="${basedir}/src/test/etc/"
                                                        regexp="/"
@@ -279,10 +279,10 @@
                                         <propertyregex property="value-jbws-app-props"
                                                        input="${unix-jbws-app-props}"
                                                        regexp="\\"
-                                                       replace="\\\\\\\\"
+                                                       replace="\\\"
                                                        global="true" />
 
-                                        <!-- ################# rls  ########## -->
+                                        <!-- ################# rls  ########## ???-->
                                         <propertyregex property="unix-project.build.directory"
                                                        input="${project.build.directory}/"
                                                        regexp="/"
@@ -291,7 +291,7 @@
                                         <propertyregex property="value-project.build.directory"
                                                        input="${unix-project.build.directory}"
                                                        regexp="\\"
-                                                       replace="\\\\\\\\"
+                                                       replace="\\\"
                                                        global="true" />
 
 
@@ -321,6 +321,9 @@
                                     <entry key="rolesPropFile" value="${value-rolesPropFile}"/>
                                     <entry key="keystorePath" value="${value-keystorePath}"/>
                                     <entry key="serverLog" value="${jbws-testsuite-default-base}.log"/>
+
+                                    <entry key="jboss.home" value="${jboss.home}"/>
+                                    <entry key="wfly-config-dir" value="${wfly-config-dir}"/>
                                 </propertyfile>
 
                                 <copy overwrite="true"
