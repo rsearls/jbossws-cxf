@@ -68,7 +68,10 @@
     <jbossws.common.version>3.3.3.Final</jbossws.common.version>
     <jbossws.common.tools.version>1.4.0.Final</jbossws.common.tools.version>
     <wildfly2600.version>26.0.0.Final</wildfly2600.version>
-    <wildfly2700.version>27.0.0.Alpha4</wildfly2700.version>
+    <!-- This branch only runs on wfly 27.0.0.Alpha[1,2,3]
+         wfly is jakarta only after those.
+    -->
+    <wildfly2700.version>27.0.0.Alpha3</wildfly2700.version>
     <ejb.api.version>2.0.0.Final</ejb.api.version>
     <cxf.version>3.4.5</cxf.version>
     <cxf.asm.version>9.1</cxf.asm.version>
