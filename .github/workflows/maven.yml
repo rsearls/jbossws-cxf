@@ -17,7 +17,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest ]
         java: ['11']
-        wildfly-version: ['wildfly2600', 'wildfly2700']
+        wildfly-version: ['wildfly2400', 'wildfly2700']
 
     steps:
       - name: Checkout jbossws-cxf
@@ -33,8 +33,17 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
           distribution: 'adopt'
-      - name: Build docbook
-        run: mvn -s ./.m2-settings.xml -f docbook/pom.xml clean install -Pgendoc
+      - name: Checkout wildfly2700
+        if: contains(matrix.wildfly-version, 'wildfly2700')
+        uses: actions/checkout@v3
+        with:
+          repository: wildfly/wildfly
+          ref: '27.0.0.Alpha3'
+          path: './wildfly'
+      - name: Build WFLY wildfly2700
+        if: contains(matrix.wildfly-version, 'wildfly2700')
+        working-directory: ./wildfly
+        run: mvn -s ../.m2-settings.xml -DskipTests=true '-Denforcer.skip=true' -Prelease clean install
       - name: Build with Maven Java ${{ matrix.java }} on WildFly ${{ matrix.wildfly-version }}
         run: |
           mvn -s ./.m2-settings.xml -B -V -fae -P${{ matrix.wildfly-version }} verify
