@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: wildfly/wildfly
-          rel: '24.x'
+          ref: '24.x'
           path: './wildfly'
       - uses: actions/cache@v1
         with:
