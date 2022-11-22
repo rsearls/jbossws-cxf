@@ -210,6 +210,11 @@
           <classifier>wildfly2400</classifier>
           <scope>provided</scope>
         </dependency>
+        <dependency>
+           <groupId>org.jboss.ws</groupId>
+           <artifactId>jbossws-wildfly2400-server-integration</artifactId>
+           <scope>provided</scope>
+       </dependency>
       </dependencies>
     </profile>
     <!--
