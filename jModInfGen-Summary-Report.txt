@@ -1,0 +1,57 @@
+  Fri Jan 27 12:33:41 EST 2023
+  jModInfoGet Summary Report
+
+13 root directories processed
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/addons/transports/http/undertow
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/addons/transports/udp
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/client
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/dist
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/endorsed
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/resources
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/server
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/test-utils
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/testsuite/cxf-tests
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/testsuite/perf-tests
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/testsuite/shared-tests
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/testsuite
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/jaspi
+0 module-info.java files found
+5 classes.dot files found
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/addons/transports/http/undertow/target/gen-jdeps/classes.dot
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/addons/transports/udp/target/gen-jdeps/classes.dot
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/client/target/gen-jdeps/classes.dot
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/server/target/gen-jdeps/classes.dot
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/test-utils/target/gen-jdeps/classes.dot
+8 directories without classes.dot files
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/dist
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/endorsed
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/resources
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/testsuite/cxf-tests
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/testsuite/perf-tests
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/testsuite/shared-tests
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/testsuite
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/jaspi
+14 service provider files found
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/client/target/classes/META-INF/services/org.jboss.ws.api.addressing.MAPBuilderFactory
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/client/target/classes/META-INF/services/org.jboss.ws.api.configuration.ClientConfigurer
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/client/target/classes/META-INF/services/org.jboss.ws.api.tools.ConsumerFactory
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/client/target/classes/META-INF/services/org.jboss.ws.api.tools.ProviderFactory
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/client/target/classes/META-INF/services/jakarta.xml.soap.SOAPConnectionFactory
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/endorsed/target/classes/META-INF/services/com.sun.tools.xjc.Plugin
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/endorsed/target/classes/META-INF/services/org.apache.cxf.bus.factory
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/endorsed/target/classes/META-INF/services/jakarta.xml.ws.spi.Provider
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/server/target/classes/META-INF/services/org.jboss.wsf.spi.DeploymentAspectManagerLocator
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/server/target/classes/META-INF/services/org.jboss.wsf.spi.invocation.RequestHandlerFactory
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/server/target/classes/META-INF/services/org.jboss.wsf.spi.invocation.WebServiceContextFactory
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/server/target/classes/META-INF/services/org.jboss.wsf.spi.management.StackConfigFactory
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/server/target/classes/META-INF/services/org.jboss.wsf.spi.serviceref.ServiceRefFactoryFactory
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/jaspi/target/classes/META-INF/services/org.jboss.wsf.spi.security.JASPIAuthenticationProvider
+5 generated-module-info.java files written
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/addons/transports/http/undertow/target/gen-jdeps/generated-module-info.java
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/addons/transports/udp/target/gen-jdeps/generated-module-info.java
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/client/target/gen-jdeps/generated-module-info.java
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/server/target/gen-jdeps/generated-module-info.java
+	/home/rsearls/j1/jbws/jbossws-cxf/modules/test-utils/target/gen-jdeps/generated-module-info.java
+
+  *** Duplicate Package Names ***
+  0 duplicate package names found
